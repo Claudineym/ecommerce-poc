@@ -13,7 +13,7 @@ Esse projeto foi desenvolvido com as seguintes tecnologias:
 - [Springboot](https://spring.io/projects/spring-boot)
 - [React](https://reactjs.org)
 
-Lista de Requisitos:
+<h2>Lista de Requisitos:</h2>
 
 RF01: O sistema deverá permitir manter um cadastro de
 categoria de produtos.
