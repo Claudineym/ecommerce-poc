@@ -84,11 +84,21 @@ public class ClienteServiceImpl implements ClienteService{
     public ServiceResponse<ClienteResponse> consultar(String nomeCliente) {
         final ServiceResponse<ClienteResponse> serviceResponse = new ServiceResponse<>();
 
-        ClienteResponse cliente = repository.findByNome(nomeCliente);
-        serviceResponse.setResult(cliente);
-        serviceResponse.addMensagem(Mensagem.SUCESSO.getCodigo(), Mensagem.SUCESSO.getDescricao());
-        serviceResponse.setStatus(HttpStatus.OK);
-        log.debug("Resultado da consulta de clientes: {}", serviceResponse.getResult());
+        Optional<Cliente> clienteOpt = repository.findByNome(nomeCliente);
+
+        if(clienteOpt.isPresent()){
+            Cliente cliente = clienteOpt.get();
+            serviceResponse.setResult( ClienteResponse.builder().nome(cliente.getNome())
+                    .celular(cliente.getCelular())
+                    .email(cliente.getEmail()).build());
+            serviceResponse.addMensagem(Mensagem.SUCESSO.getCodigo(), Mensagem.SUCESSO.getDescricao());
+            serviceResponse.setStatus(HttpStatus.OK);
+            log.debug("Resultado da consulta de clientes: {}", serviceResponse.getResult());
+            return serviceResponse;
+        }
+
+        serviceResponse.addMensagem(Mensagem.NAO_ENCONTRADO.getCodigo(), Mensagem.NAO_ENCONTRADO.getDescricao());
+        serviceResponse.setStatus(HttpStatus.NOT_FOUND);
 
         return serviceResponse;
     }
