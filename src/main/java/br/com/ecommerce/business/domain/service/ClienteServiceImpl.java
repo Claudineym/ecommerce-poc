@@ -8,6 +8,7 @@ import br.com.ecommerce.common.message.Mensagem;
 import br.com.ecommerce.common.resource.ServicePageableResponse;
 import br.com.ecommerce.common.resource.ServiceResponse;
 import br.com.ecommerce.common.resource.pages.PageMetadata;
+import br.com.ecommerce.inbound.dto.ClienteEditarRequest;
 import br.com.ecommerce.inbound.dto.ClienteRequest;
 import br.com.ecommerce.inbound.dto.ClienteResponse;
 import br.com.ecommerce.inbound.dto.ClienteSearchCriteria;
@@ -19,10 +20,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -35,8 +33,10 @@ public class ClienteServiceImpl implements ClienteService{
 
     @Override
     public ServiceResponse<ClienteResponse> criar(ClienteRequest requisicao) {
+
         Cliente  cliente = repository.save(Cliente
                 .builder()
+                .idCliente(UUID.randomUUID().toString())
                 .nome(requisicao.getNome())
                 .email(requisicao.getEmail())
                 .celular(requisicao.getCelular())
@@ -88,7 +88,9 @@ public class ClienteServiceImpl implements ClienteService{
 
         if(clienteOpt.isPresent()){
             Cliente cliente = clienteOpt.get();
-            serviceResponse.setResult( ClienteResponse.builder().nome(cliente.getNome())
+            serviceResponse.setResult( ClienteResponse.builder()
+                    .id(cliente.getIdCliente().toString())
+                    .nome(cliente.getNome())
                     .celular(cliente.getCelular())
                     .email(cliente.getEmail()).build());
             serviceResponse.addMensagem(Mensagem.SUCESSO.getCodigo(), Mensagem.SUCESSO.getDescricao());
@@ -104,7 +106,7 @@ public class ClienteServiceImpl implements ClienteService{
     }
 
     @Override
-    public ServiceResponse<Cliente> alterar(String idCliente) {
+    public ServiceResponse<Cliente> alterar(String idCliente, ClienteEditarRequest clienteEditarRequest) {
         final ServiceResponse<Cliente> serviceResponse = new ServiceResponse<>();
         Optional<Cliente> clienteOptional = repository.findById(idCliente);
         if(!clienteOptional.isPresent()){
@@ -114,8 +116,38 @@ public class ClienteServiceImpl implements ClienteService{
             return serviceResponse;
         }
 
-        Cliente cliente = repository.save(clienteOptional.get());
+        Cliente clienteDB = clienteOptional.get();
+        Cliente clienteUpdated = new Cliente();
 
+        clienteUpdated.setIdCliente(clienteDB.getIdCliente());
+
+        if(Objects.nonNull(clienteEditarRequest.getCelular()) ){
+            if (!clienteEditarRequest.getCelular().equals(clienteDB.getCelular())) {
+                clienteUpdated.setCelular(clienteEditarRequest.getCelular());
+            }
+        }
+        if(Objects.nonNull(clienteEditarRequest.getSexo())){
+            if(!clienteEditarRequest.getSexo().equals(clienteDB.getSexo())){
+                clienteUpdated.setSexo(clienteEditarRequest.getSexo());
+            }
+        }
+        if(Objects.nonNull(clienteEditarRequest.getEmail())){
+            if(!clienteEditarRequest.getEmail().equals(clienteDB.getEmail())){
+                clienteUpdated.setEmail(clienteEditarRequest.getEmail());
+            }
+        }
+        if(Objects.nonNull(clienteEditarRequest.getDtNascimento())){
+            if(!clienteEditarRequest.getDtNascimento().equals(clienteDB.getDtNascimento())){
+                clienteUpdated.setDtNascimento(clienteEditarRequest.getDtNascimento());
+            }
+        }
+        if(Objects.nonNull(clienteEditarRequest.getNome())){
+            if(!clienteEditarRequest.getNome().equals(clienteDB.getNome())){
+                clienteUpdated.setNome(clienteEditarRequest.getNome());
+            }
+        }
+
+        Cliente cliente = repository.save(clienteUpdated);
         serviceResponse.addMensagem(Mensagem.SUCESSO.getCodigo(), Mensagem.SUCESSO.getDescricao());
         serviceResponse.setResult(cliente);
         serviceResponse.setStatus(HttpStatus.OK);

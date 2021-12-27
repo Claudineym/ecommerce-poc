@@ -16,9 +16,7 @@ import java.util.UUID;
 public class Cliente implements Serializable {
     private static final long serialVersionUID = -861235869034747900L;
     @Id
-    @GeneratedValue
-    @Column( columnDefinition = "uuid", updatable = false)
-    private UUID idCliente = UUID.randomUUID();
+    private String idCliente;
     private String nome;
     @Enumerated(EnumType.ORDINAL)
     private Sexo sexo;

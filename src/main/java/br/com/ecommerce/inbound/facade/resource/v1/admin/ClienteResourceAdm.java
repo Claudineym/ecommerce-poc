@@ -4,6 +4,7 @@ import br.com.ecommerce.business.domain.entity.Cliente;
 import br.com.ecommerce.business.domain.service.ClienteServiceImpl;
 import br.com.ecommerce.common.resource.ServicePageableResponse;
 import br.com.ecommerce.common.resource.ServiceResponse;
+import br.com.ecommerce.inbound.dto.ClienteEditarRequest;
 import br.com.ecommerce.inbound.dto.ClienteRequest;
 import br.com.ecommerce.inbound.dto.ClienteResponse;
 import br.com.ecommerce.inbound.dto.ClienteSearchCriteria;
@@ -32,9 +33,9 @@ public class ClienteResourceAdm implements ClienteApiAdm{
     }
 
     @Override
-    public ServiceResponse<Cliente> alterar(String idCliente) {
+    public ServiceResponse<Cliente> alterar(String idCliente, ClienteEditarRequest cliente) {
         log.debug("Alterar cliente: {}", idCliente);
-        return clienteService.alterar(idCliente);
+        return clienteService.alterar(idCliente, cliente);
     }
 
     @Override

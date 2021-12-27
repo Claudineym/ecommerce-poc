@@ -5,6 +5,7 @@ import br.com.ecommerce.common.enums.SortByAllowedFields;
 import br.com.ecommerce.common.resource.ServicePageableResponse;
 import br.com.ecommerce.common.resource.ServiceResponse;
 import br.com.ecommerce.common.validator.SortByFields;
+import br.com.ecommerce.inbound.dto.ClienteEditarRequest;
 import br.com.ecommerce.inbound.dto.ClienteRequest;
 import br.com.ecommerce.inbound.dto.ClienteResponse;
 import br.com.ecommerce.inbound.dto.ClienteSearchCriteria;
@@ -50,7 +51,7 @@ public interface ClienteApiAdm {
     @PatchMapping(consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE,
             path = "/{idCliente}")
-    public ServiceResponse<Cliente> alterar(@PathVariable("idCliente") String idCliente);
+    public ServiceResponse<Cliente> alterar(@PathVariable("idCliente") String idCliente, @RequestBody ClienteEditarRequest cliente);
 
 
     @Operation(summary = "Operação responsável por excluir o cliente.",

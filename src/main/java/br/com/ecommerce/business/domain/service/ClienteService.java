@@ -3,6 +3,7 @@ package br.com.ecommerce.business.domain.service;
 import br.com.ecommerce.business.domain.entity.Cliente;
 import br.com.ecommerce.common.resource.ServicePageableResponse;
 import br.com.ecommerce.common.resource.ServiceResponse;
+import br.com.ecommerce.inbound.dto.ClienteEditarRequest;
 import br.com.ecommerce.inbound.dto.ClienteRequest;
 import br.com.ecommerce.inbound.dto.ClienteResponse;
 import br.com.ecommerce.inbound.dto.ClienteSearchCriteria;
@@ -21,7 +22,7 @@ public interface ClienteService {
 
     ServiceResponse<ClienteResponse> consultar(String nomeCliente);
 
-    ServiceResponse<Cliente> alterar(String idCliente);
+    ServiceResponse<Cliente> alterar(String idCliente, ClienteEditarRequest clienteEditarRequest);
 
     ServiceResponse<Boolean> excluir(String idCliente);
 }
