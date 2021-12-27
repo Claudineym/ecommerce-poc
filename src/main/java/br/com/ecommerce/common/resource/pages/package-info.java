@@ -1,0 +1,1 @@
+package br.com.ecommerce.common.resource.pages;
