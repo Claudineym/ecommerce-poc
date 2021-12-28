@@ -1,8 +1,10 @@
 package br.com.ecommerce.inbound.dto;
 
 import br.com.ecommerce.business.domain.entity.Estado;
+import lombok.Builder;
 import lombok.Data;
 
+@Builder
 @Data
 public class EnderecoRequest {
     private String cep;

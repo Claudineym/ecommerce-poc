@@ -1,6 +1,7 @@
 package br.com.ecommerce.inbound.facade.resource.v1.admin;
 
 import br.com.ecommerce.business.domain.entity.Cliente;
+import br.com.ecommerce.business.domain.service.ClienteService;
 import br.com.ecommerce.business.domain.service.ClienteServiceImpl;
 import br.com.ecommerce.common.resource.ServicePageableResponse;
 import br.com.ecommerce.common.resource.ServiceResponse;
@@ -24,7 +25,7 @@ public class ClienteResourceAdm implements ClienteApiAdm {
     public static final String SORT_BY = "sort_by";
     public static final String INVALID_SORT_FIELD = "Campo para ordenação inválido";
 
-    private final ClienteServiceImpl clienteService;
+    private final ClienteService clienteService;
 
     @Override
     public ServiceResponse<ClienteResponse> criar(ClienteRequest requisicao) {

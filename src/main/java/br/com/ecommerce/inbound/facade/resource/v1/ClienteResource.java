@@ -1,5 +1,6 @@
 package br.com.ecommerce.inbound.facade.resource.v1;
 
+import br.com.ecommerce.business.domain.service.ClienteService;
 import br.com.ecommerce.business.domain.service.ClienteServiceImpl;
 import br.com.ecommerce.common.resource.ServicePageableResponse;
 import br.com.ecommerce.common.resource.ServiceResponse;
@@ -17,18 +18,18 @@ import java.util.*;
 @RestController
 public class ClienteResource implements ClienteApi {
 
-    private final ClienteServiceImpl clienteService;
+    private final ClienteService service;
 
     @Override
     public ServiceResponse<ClienteResponse> consultar(String nomeCliente) {
         log.debug("Consultar cliente: {}", nomeCliente);
-        return clienteService.consultar(nomeCliente);
+        return service.consultar(nomeCliente);
     }
 
     @Override
     public ServicePageableResponse<List<ClienteResultResponse>> listar(ClienteSearchCriteria searchCriteria, Set<String> sortBy) {
             ServicePageableResponse<List<ClienteResultResponse>> response =
-                    clienteService.listar(searchCriteria, sortBy);
+                    service.listar(searchCriteria, sortBy);
         return response;
     }
 

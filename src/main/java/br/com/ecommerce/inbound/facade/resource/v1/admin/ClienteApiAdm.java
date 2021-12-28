@@ -21,6 +21,8 @@ import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 import static br.com.ecommerce.inbound.facade.resource.v1.admin.ClienteResourceAdm.INVALID_SORT_FIELD;
 import static br.com.ecommerce.inbound.facade.resource.v1.admin.ClienteResourceAdm.SORT_BY;
 
@@ -40,7 +42,7 @@ public interface ClienteApiAdm {
                                     schema = @Schema(implementation = ClienteResponse.class))))
     })
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ServiceResponse<ClienteResponse> criar(@Validated @RequestBody ClienteRequest requisicao);
+    public ServiceResponse<ClienteResponse> criar(@Valid @RequestBody ClienteRequest requisicao);
 
 
     @Operation(summary = "Operação responsável por alterar as informações do cliente.",

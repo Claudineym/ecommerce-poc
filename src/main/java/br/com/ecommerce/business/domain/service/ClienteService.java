@@ -10,7 +10,6 @@ import br.com.ecommerce.inbound.dto.ClienteSearchCriteria;
 import br.com.ecommerce.outbound.dto.ClienteResultResponse;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 public interface ClienteService {

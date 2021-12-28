@@ -1,7 +1,6 @@
 package br.com.ecommerce.business.domain.service;
 
 import br.com.ecommerce.business.domain.entity.Cliente;
-import br.com.ecommerce.business.domain.entity.Endereco;
 import br.com.ecommerce.business.domain.repository.ClienteRepository;
 import br.com.ecommerce.business.domain.repository.PagingAndSortingClienteRepository;
 import br.com.ecommerce.business.domain.service.helper.ClienteServiceHelper;
@@ -19,7 +18,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
