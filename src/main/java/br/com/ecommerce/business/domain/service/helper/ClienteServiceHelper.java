@@ -63,7 +63,6 @@ public class ClienteServiceHelper {
             ClienteSearchCriteria searchCriteria) {
         List<Predicate> predicates = new ArrayList<>();
 
-        predicates.add(criteriaBuilder.equal(root.get(NOME), searchCriteria.getNome()));
         return predicates.toArray(new Predicate[0]);
     }
 

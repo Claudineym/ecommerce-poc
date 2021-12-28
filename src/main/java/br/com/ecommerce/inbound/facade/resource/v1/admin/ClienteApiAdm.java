@@ -59,8 +59,7 @@ public interface ClienteApiAdm {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Cliente excluido com sucesso."),
             @ApiResponse(responseCode = "400", description = "Cliente inválido.") })
-    @DeleteMapping(consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE,
+    @DeleteMapping( produces = MediaType.APPLICATION_JSON_VALUE,
             path = "/{idCliente}")
     public ServiceResponse<Boolean> excluir(@PathVariable("idCliente") String idCliente);
 

@@ -45,6 +45,7 @@ public class ClienteServiceImpl implements ClienteService{
 
         return ServiceResponse.<ClienteResponse>builder()
                 .result(ClienteResponse.builder()
+                        .id(cliente.getIdCliente())
                         .nome(cliente.getNome())
                         .celular(cliente.getCelular())
                         .email(cliente.getEmail())
@@ -117,37 +118,34 @@ public class ClienteServiceImpl implements ClienteService{
         }
 
         Cliente clienteDB = clienteOptional.get();
-        Cliente clienteUpdated = new Cliente();
-
-        clienteUpdated.setIdCliente(clienteDB.getIdCliente());
 
         if(Objects.nonNull(clienteEditarRequest.getCelular()) ){
             if (!clienteEditarRequest.getCelular().equals(clienteDB.getCelular())) {
-                clienteUpdated.setCelular(clienteEditarRequest.getCelular());
+                clienteDB.setCelular(clienteEditarRequest.getCelular());
             }
         }
         if(Objects.nonNull(clienteEditarRequest.getSexo())){
             if(!clienteEditarRequest.getSexo().equals(clienteDB.getSexo())){
-                clienteUpdated.setSexo(clienteEditarRequest.getSexo());
+                clienteDB.setSexo(clienteEditarRequest.getSexo());
             }
         }
         if(Objects.nonNull(clienteEditarRequest.getEmail())){
             if(!clienteEditarRequest.getEmail().equals(clienteDB.getEmail())){
-                clienteUpdated.setEmail(clienteEditarRequest.getEmail());
+                clienteDB.setEmail(clienteEditarRequest.getEmail());
             }
         }
         if(Objects.nonNull(clienteEditarRequest.getDtNascimento())){
             if(!clienteEditarRequest.getDtNascimento().equals(clienteDB.getDtNascimento())){
-                clienteUpdated.setDtNascimento(clienteEditarRequest.getDtNascimento());
+                clienteDB.setDtNascimento(clienteEditarRequest.getDtNascimento());
             }
         }
         if(Objects.nonNull(clienteEditarRequest.getNome())){
             if(!clienteEditarRequest.getNome().equals(clienteDB.getNome())){
-                clienteUpdated.setNome(clienteEditarRequest.getNome());
+                clienteDB.setNome(clienteEditarRequest.getNome());
             }
         }
 
-        Cliente cliente = repository.save(clienteUpdated);
+        Cliente cliente = repository.save(clienteDB);
         serviceResponse.addMensagem(Mensagem.SUCESSO.getCodigo(), Mensagem.SUCESSO.getDescricao());
         serviceResponse.setResult(cliente);
         serviceResponse.setStatus(HttpStatus.OK);

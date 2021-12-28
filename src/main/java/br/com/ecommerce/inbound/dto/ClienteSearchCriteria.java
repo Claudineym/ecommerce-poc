@@ -12,9 +12,8 @@ import javax.validation.constraints.PositiveOrZero;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder(builderMethodName = "with")
+@Builder
 public class ClienteSearchCriteria {
-    private String nome;
 
     @PositiveOrZero(message = "Limit não pode ser negativo")
     @Min(value = 1, message = "Limite de resultados não pode ser igual a Zero ou Negativo")
