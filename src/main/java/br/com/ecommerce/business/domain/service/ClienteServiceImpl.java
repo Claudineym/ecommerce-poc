@@ -1,6 +1,7 @@
 package br.com.ecommerce.business.domain.service;
 
 import br.com.ecommerce.business.domain.entity.Cliente;
+import br.com.ecommerce.business.domain.entity.Endereco;
 import br.com.ecommerce.business.domain.repository.ClienteRepository;
 import br.com.ecommerce.business.domain.repository.PagingAndSortingClienteRepository;
 import br.com.ecommerce.business.domain.service.helper.ClienteServiceHelper;
@@ -8,10 +9,7 @@ import br.com.ecommerce.common.message.Mensagem;
 import br.com.ecommerce.common.resource.ServicePageableResponse;
 import br.com.ecommerce.common.resource.ServiceResponse;
 import br.com.ecommerce.common.resource.pages.PageMetadata;
-import br.com.ecommerce.inbound.dto.ClienteEditarRequest;
-import br.com.ecommerce.inbound.dto.ClienteRequest;
-import br.com.ecommerce.inbound.dto.ClienteResponse;
-import br.com.ecommerce.inbound.dto.ClienteSearchCriteria;
+import br.com.ecommerce.inbound.dto.*;
 import br.com.ecommerce.outbound.dto.ClienteResultResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -34,22 +33,23 @@ public class ClienteServiceImpl implements ClienteService{
     @Override
     public ServiceResponse<ClienteResponse> criar(ClienteRequest requisicao) {
 
-        Cliente  cliente = repository.save(Cliente
+        Cliente cliente = Cliente
                 .builder()
                 .idCliente(UUID.randomUUID().toString())
                 .nome(requisicao.getNome())
                 .email(requisicao.getEmail())
                 .celular(requisicao.getCelular())
                 .dtNascimento(requisicao.getDtNascimento())
-                .build());
+                .build();
+
+        cliente.setEnderecos(helper.toEndereco(requisicao.getEnderecos()));
+
+        Cliente  clienteDB = repository.save(cliente);
+
+        Set<EnderecoResponse> enderecosResp = helper.toEnderecoResponse(clienteDB.getEnderecos());
 
         return ServiceResponse.<ClienteResponse>builder()
-                .result(ClienteResponse.builder()
-                        .id(cliente.getIdCliente())
-                        .nome(cliente.getNome())
-                        .celular(cliente.getCelular())
-                        .email(cliente.getEmail())
-                        .build()
+                .result(helper.toClienteResponse(clienteDB, enderecosResp)
                 ).mensagens(
                         Collections.singletonList(new ServiceResponse.Mensagem(
                                 Mensagem.SUCESSO.getCodigo(), Mensagem.SUCESSO.getDescricao())))
@@ -89,11 +89,10 @@ public class ClienteServiceImpl implements ClienteService{
 
         if(clienteOpt.isPresent()){
             Cliente cliente = clienteOpt.get();
-            serviceResponse.setResult( ClienteResponse.builder()
-                    .id(cliente.getIdCliente().toString())
-                    .nome(cliente.getNome())
-                    .celular(cliente.getCelular())
-                    .email(cliente.getEmail()).build());
+
+            Set<EnderecoResponse> enderecos = helper.toEnderecoResponse(cliente.getEnderecos());
+
+            serviceResponse.setResult(helper.toClienteResponse(cliente, enderecos));
             serviceResponse.addMensagem(Mensagem.SUCESSO.getCodigo(), Mensagem.SUCESSO.getDescricao());
             serviceResponse.setStatus(HttpStatus.OK);
             log.debug("Resultado da consulta de clientes: {}", serviceResponse.getResult());

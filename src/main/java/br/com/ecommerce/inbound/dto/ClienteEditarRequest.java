@@ -3,9 +3,8 @@ package br.com.ecommerce.inbound.dto;
 import br.com.ecommerce.business.domain.entity.Sexo;
 import lombok.Data;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.Set;
 
 @Data
 public class ClienteEditarRequest {
@@ -14,4 +13,5 @@ public class ClienteEditarRequest {
     private Date dtNascimento;
     private String celular;
     private String email;
+    private Set<EnderecoRequest> enderecos;
 }

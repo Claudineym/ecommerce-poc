@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Set;
+
 @Builder
 @Data
 @AllArgsConstructor
@@ -14,4 +16,5 @@ public class ClienteResponse {
     private String nome;
     private String celular;
     private String email;
+    private Set<EnderecoResponse> enderecos;
 }

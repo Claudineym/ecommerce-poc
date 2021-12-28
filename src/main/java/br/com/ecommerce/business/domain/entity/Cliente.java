@@ -6,6 +6,8 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Builder
@@ -23,4 +25,10 @@ public class Cliente implements Serializable {
     private Date dtNascimento;
     private String celular;
     private String email;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(name="CLIENTE_ENDERECO",
+            joinColumns={@JoinColumn(name = "CLIENTE_ID")},
+            inverseJoinColumns={@JoinColumn(name = "ENDERECO_ID")})
+    private Set<Endereco> enderecos;
 }

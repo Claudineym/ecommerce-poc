@@ -1,8 +1,11 @@
 package br.com.ecommerce.business.domain.service.helper;
 
 import br.com.ecommerce.business.domain.entity.Cliente;
+import br.com.ecommerce.business.domain.entity.Endereco;
 import br.com.ecommerce.inbound.dto.ClienteResponse;
 import br.com.ecommerce.inbound.dto.ClienteSearchCriteria;
+import br.com.ecommerce.inbound.dto.EnderecoRequest;
+import br.com.ecommerce.inbound.dto.EnderecoResponse;
 import br.com.ecommerce.outbound.dto.ClienteResultResponse;
 import com.google.common.base.Preconditions;
 import lombok.Data;
@@ -47,6 +50,7 @@ public class ClienteServiceHelper {
                 .nome(cliente.getNome())
                 .email(cliente.getEmail())
                 .celular(cliente.getCelular())
+                .enderecos(toEnderecoResponse(cliente.getEnderecos()))
                 .build();
     }
 
@@ -97,5 +101,49 @@ public class ClienteServiceHelper {
                 Sort.Direction.fromOptionalString(direction).orElse(Sort.Direction.ASC),
                 property,
                 Sort.NullHandling.NATIVE);
+    }
+
+    public ClienteResponse toClienteResponse(Cliente cliente, Set<EnderecoResponse> enderecos){
+        return  ClienteResponse.builder()
+                .id(cliente.getIdCliente().toString())
+                .nome(cliente.getNome())
+                .celular(cliente.getCelular())
+                .email(cliente.getEmail())
+                .enderecos(enderecos).build();
+    }
+
+    public Set<EnderecoResponse> toEnderecoResponse(Set<Endereco> enderecos){
+        return enderecos
+                .stream().map(e->{
+                    return EnderecoResponse
+                            .builder()
+                            .cep(e.getCep())
+                            .endereco(e.getEndereco())
+                            .complemento(e.getComplemento())
+                            .numero(e.getNumero())
+                            .bairro(e.getBairro())
+                            .cidade(e.getCidade())
+                            .estado(e.getEstado())
+                            .build();
+                }).collect(Collectors.toSet());
+    }
+
+    public Set<Endereco> toEndereco(Set<EnderecoRequest> enderecos){
+        return  enderecos
+                .stream()
+                .map(e->{
+                    return Endereco
+                            .builder()
+                            .idEstado(UUID.randomUUID().toString())
+                            .cep(e.getCep())
+                            .bairro(e.getBairro())
+                            .cidade(e.getCidade())
+                            .complemento(e.getComplemento())
+                            .endereco(e.getEndereco())
+                            .estado(e.getEstado())
+                            .numero(e.getNumero())
+                            .endereco(e.getEndereco())
+                            .build();
+                }).collect(Collectors.toSet());
     }
 }

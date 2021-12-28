@@ -19,7 +19,7 @@ import java.util.Set;
 @Slf4j
 @Data
 @RestController
-public class ClienteResourceAdm implements ClienteApiAdm{
+public class ClienteResourceAdm implements ClienteApiAdm {
 
     public static final String SORT_BY = "sort_by";
     public static final String INVALID_SORT_FIELD = "Campo para ordenação inválido";
