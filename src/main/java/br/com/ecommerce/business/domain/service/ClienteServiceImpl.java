@@ -97,8 +97,7 @@ public class ClienteServiceImpl implements ClienteService{
             return serviceResponse;
         }
 
-        serviceResponse.addMensagem(Mensagem.NAO_ENCONTRADO.getCodigo(), Mensagem.NAO_ENCONTRADO.getDescricao());
-        serviceResponse.setStatus(HttpStatus.NOT_FOUND);
+        serviceResponse.addMensagem(Mensagem.NAO_ENCONTRADO.getCodigo(), Mensagem.NAO_ENCONTRADO.getDescricao().replace("${0}", nomeCliente));
 
         return serviceResponse;
     }

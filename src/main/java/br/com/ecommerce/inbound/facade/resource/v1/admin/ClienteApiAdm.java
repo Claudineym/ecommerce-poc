@@ -69,7 +69,7 @@ public interface ClienteApiAdm {
             description = "excluir o cliente pelo nome.", security = {@SecurityRequirement(name = "Bearer")})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Sucesso."),
-            @ApiResponse(responseCode = "400", description = "Cliente inválido.") })
+            @ApiResponse(responseCode = "200", description = "Cliente não encontrado.") })
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, path = "/{nomeCliente}")
     ServiceResponse<ClienteResponse> consultar(@PathVariable("nomeCliente") String nomeCliente);
 
