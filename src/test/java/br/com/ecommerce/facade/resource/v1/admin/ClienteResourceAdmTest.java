@@ -1,6 +1,5 @@
 package br.com.ecommerce.facade.resource.v1.admin;
 
-import br.com.ecommerce.business.domain.entity.Cliente;
 import br.com.ecommerce.business.domain.service.ClienteService;
 import br.com.ecommerce.common.resource.ServiceResponse;
 import br.com.ecommerce.inbound.dto.ClienteResponse;
@@ -8,7 +7,6 @@ import br.com.ecommerce.inbound.dto.ClienteSearchCriteria;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;

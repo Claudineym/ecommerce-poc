@@ -1,7 +1,9 @@
 package br.com.ecommerce.inbound.facade.resource.v1;
 
+import br.com.ecommerce.common.enums.SortByAllowedFields;
 import br.com.ecommerce.common.resource.ServicePageableResponse;
 import br.com.ecommerce.common.resource.ServiceResponse;
+import br.com.ecommerce.common.validator.SortByFields;
 import br.com.ecommerce.inbound.dto.ClienteResponse;
 import br.com.ecommerce.inbound.dto.ClienteSearchCriteria;
 import br.com.ecommerce.outbound.dto.ClienteResultResponse;
@@ -16,6 +18,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Set;
 
+import static br.com.ecommerce.inbound.facade.resource.v1.admin.ClienteResourceAdm.INVALID_SORT_FIELD;
+import static br.com.ecommerce.inbound.facade.resource.v1.admin.ClienteResourceAdm.SORT_BY;
+
 @Validated
 @RequestMapping("v1/clientes")
 public interface ClienteApi {
@@ -24,10 +29,8 @@ public interface ClienteApi {
             description = "excluir o cliente pelo nome.", security = {@SecurityRequirement(name = "Bearer")})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Sucesso."),
-            @ApiResponse(responseCode = "400", description = "Cliente inválido.") })
-    @GetMapping(consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE,
-            path = "/{nomeCliente}")
+            @ApiResponse(responseCode = "200", description = "Cliente não encontrado.") })
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, path = "/{nomeCliente}")
     ServiceResponse<ClienteResponse> consultar(@PathVariable("nomeCliente") String nomeCliente);
 
 
@@ -36,8 +39,10 @@ public interface ClienteApi {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Sucesso."),
             @ApiResponse(responseCode = "400", description = "Inválido.") })
-    @GetMapping(consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     ServicePageableResponse<List<ClienteResultResponse>> listar(
-            ClienteSearchCriteria searchCriteria, Set<String> sortBy);
+            @Validated ClienteSearchCriteria searchCriteria,
+            @RequestParam(value = SORT_BY, required = false)
+            @SortByFields(enumClass = SortByAllowedFields.class, message = INVALID_SORT_FIELD)
+                    Set<String> sortBy);
 }

@@ -1,7 +1,6 @@
 package br.com.ecommerce.inbound.facade.resource.v1;
 
 import br.com.ecommerce.business.domain.service.ClienteService;
-import br.com.ecommerce.business.domain.service.ClienteServiceImpl;
 import br.com.ecommerce.common.resource.ServicePageableResponse;
 import br.com.ecommerce.common.resource.ServiceResponse;
 import br.com.ecommerce.inbound.dto.ClienteResponse;

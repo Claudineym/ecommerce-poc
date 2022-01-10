@@ -25,7 +25,6 @@ import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toCollection;
 
-@Data
 @Component
 public class ClienteServiceHelper {
 
