@@ -4,8 +4,7 @@ import br.com.ecommerce.business.domain.entity.Cliente;
 import br.com.ecommerce.business.domain.service.ClienteService;
 import br.com.ecommerce.business.domain.service.helper.ClienteServiceHelper;
 import br.com.ecommerce.common.resource.ServiceResponse;
-import br.com.ecommerce.inbound.dto.ClienteResponse;
-import br.com.ecommerce.inbound.dto.ClienteSearchCriteria;
+import br.com.ecommerce.inbound.dto.PessoaSearchCriteria;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -62,7 +61,7 @@ public class ClienteResourceAdmTest extends ClienteResourceAdmTestBaseTest {
     @Test
     @DisplayName("Teste para trazer todos Clientes")
     void deveTrazerTodosClientes() throws Exception {
-        ClienteSearchCriteria searchCriteria = ClienteSearchCriteria.builder().offset(0).limit(10).build();
+        PessoaSearchCriteria searchCriteria = PessoaSearchCriteria.builder().offset(0).limit(10).build();
         Specification<Cliente> criteria = helper.getCriteria(searchCriteria);
 
         given(clienteService.listar(criteria, searchCriteria, Set.of("idCliente.desc"))).willReturn(listar());

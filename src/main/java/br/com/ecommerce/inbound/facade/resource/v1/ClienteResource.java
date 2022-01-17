@@ -8,10 +8,10 @@ import br.com.ecommerce.common.message.Mensagem;
 import br.com.ecommerce.common.resource.ServicePageableResponse;
 import br.com.ecommerce.common.resource.ServiceResponse;
 import br.com.ecommerce.common.resource.pages.PageMetadata;
-import br.com.ecommerce.inbound.dto.ClienteResponse;
-import br.com.ecommerce.inbound.dto.ClienteSearchCriteria;
+import br.com.ecommerce.inbound.dto.PessoaResponse;
+import br.com.ecommerce.inbound.dto.PessoaSearchCriteria;
 import br.com.ecommerce.inbound.dto.EnderecoResponse;
-import br.com.ecommerce.outbound.dto.ClienteResultResponse;
+import br.com.ecommerce.outbound.dto.PessoaResultResponse;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -31,9 +31,9 @@ public class ClienteResource implements ClienteApi {
     private final ClienteServiceHelper helper;
 
     @Override
-    public ServiceResponse<ClienteResponse> consultar(String nomeCliente) {
+    public ServiceResponse<PessoaResponse> consultar(String nomeCliente) {
         log.debug("Consultar cliente: {}", nomeCliente);
-        final ServiceResponse<ClienteResponse> serviceResponse = new ServiceResponse<>();
+        final ServiceResponse<PessoaResponse> serviceResponse = new ServiceResponse<>();
 
         Optional<Cliente> clienteOpt = repository.findByNome(nomeCliente);
 
@@ -55,8 +55,8 @@ public class ClienteResource implements ClienteApi {
     }
 
     @Override
-    public ServicePageableResponse<List<ClienteResultResponse>> listar(ClienteSearchCriteria searchCriteria, Set<String> sortBy) {
-        ServicePageableResponse<List<ClienteResultResponse>> response =
+    public ServicePageableResponse<List<PessoaResultResponse>> listar(PessoaSearchCriteria searchCriteria, Set<String> sortBy) {
+        ServicePageableResponse<List<PessoaResultResponse>> response =
                 new ServicePageableResponse<>();
 
         Specification<Cliente> criteria = helper.getCriteria(searchCriteria);
@@ -70,7 +70,7 @@ public class ClienteResource implements ClienteApi {
                         (long) searchCriteria.getOffset(),
                         (long) searchCriteria.getLimit());
 
-        Page<ClienteResultResponse> docs = helper.toClienteResponse(pages);
+        Page<PessoaResultResponse> docs = helper.toClienteResponse(pages);
 
         response.setMetadata(pageMetadata);
         response.setResult(docs.getContent());

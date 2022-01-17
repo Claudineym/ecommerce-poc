@@ -1,18 +1,19 @@
 package br.com.ecommerce.business.domain.service.helper;
 
-import br.com.ecommerce.business.domain.entity.Cliente;
 import br.com.ecommerce.business.domain.entity.Endereco;
+import br.com.ecommerce.business.domain.entity.Vendedor;
 import br.com.ecommerce.inbound.dto.PessoaSearchCriteria;
 import br.com.ecommerce.inbound.dto.EnderecoRequest;
 import br.com.ecommerce.inbound.dto.EnderecoResponse;
+import br.com.ecommerce.inbound.dto.PessoaResponse;
 import br.com.ecommerce.outbound.dto.PessoaResultResponse;
 import com.google.common.base.Preconditions;
-import lombok.Data;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Predicate;
@@ -23,35 +24,35 @@ import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toCollection;
 
-@Data
-public class ClienteServiceHelperTest {
+@Component
+public class VendedorServiceHelper {
 
     private static final String SORT_ORDER_REGEX = "^([a-zA-Z0-9]*)(\\.(asc|desc))?";
     private static final int FIELD_NAME_GROUP_ORDER = 1;
     private static final int SORT_ORDER_DIRECTION_GROUP_ORDER = 3;
     private static final String NOME = "nome";
-    private static final String DEFAULT_ORDER_COLUMN = "idCliente.asc";
+    private static final String DEFAULT_ORDER_COLUMN = ".asc";
 
 
-    public Page<PessoaResultResponse> toClienteResponse(
-            Page<Cliente> clientes) {
+    public Page<PessoaResultResponse> toVendedorResponse(
+            Page<Vendedor> vendedores) {
         List<PessoaResultResponse> response =
-                clientes.stream().map(this::buildClienteResult).collect(Collectors.toList());
+                vendedores.stream().map(this::buildVendedorResult).collect(Collectors.toList());
         return new PageImpl<>(response);
     }
 
-    public PessoaResultResponse buildClienteResult(Cliente cliente){
+    public PessoaResultResponse buildVendedorResult(Vendedor vendedor){
         return PessoaResultResponse
                 .builder()
-                .id(cliente.getId())
-                .nome(cliente.getNome())
-                .email(cliente.getEmail())
-                .celular(cliente.getCelular())
-                .enderecos(toEnderecoResponse(cliente.getEnderecos()))
+                .id(vendedor.getId())
+                .nome(vendedor.getNome())
+                .email(vendedor.getEmail())
+                .celular(vendedor.getCelular())
+                .enderecos(toEnderecoResponse(vendedor.getEnderecos()))
                 .build();
     }
 
-    public Specification<Cliente> getCriteria(
+    public Specification<Vendedor> getCriteria(
             PessoaSearchCriteria searchCriteria) {
 
         return (root, query, criteriaBuilder) ->
@@ -59,7 +60,7 @@ public class ClienteServiceHelperTest {
     }
 
     public Predicate[] buildPredicates(
-            Root<Cliente> root,
+            Root<Vendedor> root,
             CriteriaBuilder criteriaBuilder,
             PessoaSearchCriteria searchCriteria) {
         List<Predicate> predicates = new ArrayList<>();
@@ -100,9 +101,13 @@ public class ClienteServiceHelperTest {
                 Sort.NullHandling.NATIVE);
     }
 
-    public Cliente toCliente(Cliente cliente, Set<Endereco> enderecos){
-        cliente.setEnderecos(enderecos);
-        return cliente;
+    public PessoaResponse toVendedorResponse(Vendedor vendedor, Set<EnderecoResponse> enderecos){
+        return  PessoaResponse.builder()
+                .id(vendedor.getId())
+                .nome(vendedor.getNome())
+                .celular(vendedor.getCelular())
+                .email(vendedor.getEmail())
+                .enderecos(enderecos).build();
     }
 
     public Set<EnderecoResponse> toEnderecoResponse(Set<Endereco> enderecos){

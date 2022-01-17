@@ -13,8 +13,8 @@ import java.util.Set;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Schema(defaultValue = "clienteResultResponse")
-public class ClienteResultResponse {
+@Schema(defaultValue = "pessoaResultResponse")
+public class PessoaResultResponse {
     private String id;
     private String nome;
     private String celular;

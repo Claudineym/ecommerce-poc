@@ -32,7 +32,7 @@ public class SwaggerDocumentationConfig {
         return GroupedOpenApi.builder()
                 .packagesToScan("br.com.ecommerce.inbound.facade.resource.v1")
                 .group("ecommerce-public")
-                .pathsToMatch("/v1/clientes/**")
+                .pathsToMatch("/v1/public/**")
                 .build();
     }
     @Bean

@@ -17,7 +17,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum SortByAllowedFields {
-  IDCLIENTE("idCliente"),
+  IDCLIENTE("id"),
   NOME("nome");
 
   private final String value;

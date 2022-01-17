@@ -8,12 +8,9 @@ import br.com.ecommerce.business.domain.service.helper.ClienteServiceHelperTest;
 import br.com.ecommerce.common.message.Mensagem;
 import br.com.ecommerce.common.resource.ServicePageableResponse;
 import br.com.ecommerce.common.resource.ServiceResponse;
-import br.com.ecommerce.common.resource.pages.PageMetadata;
-import br.com.ecommerce.inbound.dto.ClienteRequest;
-import br.com.ecommerce.inbound.dto.ClienteResponse;
+import br.com.ecommerce.inbound.dto.PessoaRequest;
 import br.com.ecommerce.inbound.dto.EnderecoRequest;
-import br.com.ecommerce.inbound.dto.EnderecoResponse;
-import br.com.ecommerce.outbound.dto.ClienteResultResponse;
+import br.com.ecommerce.outbound.dto.PessoaResultResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.data.domain.Page;
@@ -37,7 +34,7 @@ public class ClienteResourceAdmTestBaseTest extends ClienteServiceHelperTest {
     }
 
     protected Page<Cliente> listar(){
-        ServicePageableResponse<List<ClienteResultResponse>> response =
+        ServicePageableResponse<List<PessoaResultResponse>> response =
                 new ServicePageableResponse<>();
         Page<Cliente> pages = new PageImpl(gerarListaDeClientes());
         return pages;
@@ -63,8 +60,8 @@ public class ClienteResourceAdmTestBaseTest extends ClienteServiceHelperTest {
         return this.clientes;
     }
 
-    protected ClienteRequest gerarClienteRequest() {
-        return ClienteRequest.builder()
+    protected PessoaRequest gerarClienteRequest() {
+        return PessoaRequest.builder()
                     .nome("Luiz da Silva")
                     .celular("11988252536")
                     .email("lsilva@gmail.com")

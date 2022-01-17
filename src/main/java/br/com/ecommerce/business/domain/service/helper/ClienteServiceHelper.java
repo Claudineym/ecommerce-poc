@@ -2,13 +2,12 @@ package br.com.ecommerce.business.domain.service.helper;
 
 import br.com.ecommerce.business.domain.entity.Cliente;
 import br.com.ecommerce.business.domain.entity.Endereco;
-import br.com.ecommerce.inbound.dto.ClienteResponse;
-import br.com.ecommerce.inbound.dto.ClienteSearchCriteria;
+import br.com.ecommerce.inbound.dto.PessoaResponse;
+import br.com.ecommerce.inbound.dto.PessoaSearchCriteria;
 import br.com.ecommerce.inbound.dto.EnderecoRequest;
 import br.com.ecommerce.inbound.dto.EnderecoResponse;
-import br.com.ecommerce.outbound.dto.ClienteResultResponse;
+import br.com.ecommerce.outbound.dto.PessoaResultResponse;
 import com.google.common.base.Preconditions;
-import lombok.Data;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -32,20 +31,20 @@ public class ClienteServiceHelper {
     private static final int FIELD_NAME_GROUP_ORDER = 1;
     private static final int SORT_ORDER_DIRECTION_GROUP_ORDER = 3;
     private static final String NOME = "nome";
-    private static final String DEFAULT_ORDER_COLUMN = "idCliente.asc";
+    private static final String DEFAULT_ORDER_COLUMN = ".asc";
 
 
-    public Page<ClienteResultResponse> toClienteResponse(
+    public Page<PessoaResultResponse> toClienteResponse(
             Page<Cliente> clientes) {
-        List<ClienteResultResponse> response =
+        List<PessoaResultResponse> response =
                 clientes.stream().map(this::buildClienteResult).collect(Collectors.toList());
         return new PageImpl<>(response);
     }
 
-    public ClienteResultResponse buildClienteResult(Cliente cliente){
-        return ClienteResultResponse
+    public PessoaResultResponse buildClienteResult(Cliente cliente){
+        return PessoaResultResponse
                 .builder()
-                .id(cliente.getIdCliente().toString())
+                .id(cliente.getId())
                 .nome(cliente.getNome())
                 .email(cliente.getEmail())
                 .celular(cliente.getCelular())
@@ -54,7 +53,7 @@ public class ClienteServiceHelper {
     }
 
     public Specification<Cliente> getCriteria(
-            ClienteSearchCriteria searchCriteria) {
+            PessoaSearchCriteria searchCriteria) {
 
         return (root, query, criteriaBuilder) ->
                 criteriaBuilder.and(buildPredicates(root, criteriaBuilder, searchCriteria));
@@ -63,13 +62,13 @@ public class ClienteServiceHelper {
     public Predicate[] buildPredicates(
             Root<Cliente> root,
             CriteriaBuilder criteriaBuilder,
-            ClienteSearchCriteria searchCriteria) {
+            PessoaSearchCriteria searchCriteria) {
         List<Predicate> predicates = new ArrayList<>();
 
         return predicates.toArray(new Predicate[0]);
     }
 
-    public PageRequest buildPaging(ClienteSearchCriteria criteria, Set<String> sortBy) {
+    public PageRequest buildPaging(PessoaSearchCriteria criteria, Set<String> sortBy) {
         return PageRequest.of(
                 criteria.getOffset(),
                 criteria.getLimit(),
@@ -102,9 +101,9 @@ public class ClienteServiceHelper {
                 Sort.NullHandling.NATIVE);
     }
 
-    public ClienteResponse toClienteResponse(Cliente cliente, Set<EnderecoResponse> enderecos){
-        return  ClienteResponse.builder()
-                .id(cliente.getIdCliente().toString())
+    public PessoaResponse toClienteResponse(Cliente cliente, Set<EnderecoResponse> enderecos){
+        return  PessoaResponse.builder()
+                .id(cliente.getId())
                 .nome(cliente.getNome())
                 .celular(cliente.getCelular())
                 .email(cliente.getEmail())

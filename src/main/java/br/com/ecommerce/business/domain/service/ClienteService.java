@@ -4,11 +4,7 @@ import br.com.ecommerce.business.domain.entity.Cliente;
 import br.com.ecommerce.business.domain.repository.ClienteRepository;
 import br.com.ecommerce.business.domain.repository.PagingAndSortingClienteRepository;
 import br.com.ecommerce.business.domain.service.helper.ClienteServiceHelper;
-import br.com.ecommerce.common.message.Mensagem;
-import br.com.ecommerce.common.resource.ServicePageableResponse;
-import br.com.ecommerce.common.resource.pages.PageMetadata;
 import br.com.ecommerce.inbound.dto.*;
-import br.com.ecommerce.outbound.dto.ClienteResultResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -30,8 +26,8 @@ public class ClienteService {
        return repository.save(cliente);
     }
 
-    public Page<Cliente> listar(Specification<Cliente> criteria, ClienteSearchCriteria searchCriteria, Set<String> sortBy) {
-        var paging = helper.buildPaging(searchCriteria, sortBy);
+    public Page<Cliente> listar(Specification<Cliente> criteria, PessoaSearchCriteria searchCriteria, Set<String> sortBy) {
+        var paging = helper.buildPaging(searchCriteria, sortBy == null ? Set.of("id") : sortBy);
         Page<Cliente> pages = pagingAndSortingClienteRepository.findAll(criteria, paging);
         return pages;
     }

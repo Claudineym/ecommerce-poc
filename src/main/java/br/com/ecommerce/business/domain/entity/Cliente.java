@@ -13,29 +13,8 @@ import java.util.UUID;
 @NoArgsConstructor
 @Getter @Setter
 @Entity
-public class Cliente {
-    @Id
-    private String idCliente;
-    private String nome;
-    @Enumerated(EnumType.ORDINAL)
-    private Sexo sexo;
-    private Date dtNascimento;
-    private String celular;
-    private String email;
-
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinTable(name="CLIENTE_ENDERECO",
-            joinColumns={@JoinColumn(name = "CLIENTE_ID")},
-            inverseJoinColumns={@JoinColumn(name = "ENDERECO_ID")})
-    private Set<Endereco> enderecos;
-
+public class Cliente extends Pessoa {
     public Cliente(String nome, Sexo sexo, Date dtNascimento, String celular, String email, Set<Endereco> enderecos) {
-        this.idCliente = UUID.randomUUID().toString();
-        this.nome = nome;
-        this.sexo = sexo;
-        this.dtNascimento = dtNascimento;
-        this.celular = celular;
-        this.email = email;
-        this.enderecos = enderecos;
+        super(UUID.randomUUID().toString(), nome, sexo, dtNascimento, celular, email, enderecos);
     }
 }

@@ -1,9 +1,10 @@
 package br.com.ecommerce.inbound.facade.resource.v1.admin;
 
 import br.com.ecommerce.business.domain.entity.Cliente;
-import br.com.ecommerce.business.domain.repository.ClienteRepository;
-import br.com.ecommerce.business.domain.service.ClienteService;
-import br.com.ecommerce.business.domain.service.helper.ClienteServiceHelper;
+import br.com.ecommerce.business.domain.entity.Vendedor;
+import br.com.ecommerce.business.domain.repository.VendedorRepository;
+import br.com.ecommerce.business.domain.service.VendedorService;
+import br.com.ecommerce.business.domain.service.helper.VendedorServiceHelper;
 import br.com.ecommerce.common.message.Mensagem;
 import br.com.ecommerce.common.resource.ServicePageableResponse;
 import br.com.ecommerce.common.resource.ServiceResponse;
@@ -25,26 +26,26 @@ import java.util.Set;
 @Slf4j
 @Data
 @RestController
-public class ClienteResourceAdm implements ClienteApiAdm {
+public class VendedorResourceAdm implements VendedorApiAdm {
 
     public static final String SORT_BY = "sort_by";
     public static final String INVALID_SORT_FIELD = "Campo para ordenação inválido";
 
-    private final ClienteRepository repository;
-    private final ClienteService clienteService;
-    private final ClienteServiceHelper helper;
+    private final VendedorRepository repository;
+    private final VendedorService vendedorService;
+    private final VendedorServiceHelper helper;
 
     @Override
     public ServiceResponse<PessoaResponse> criar(PessoaRequest requisicao) {
-        log.debug("Criar cliente: {}", requisicao);
-        var cliente = requisicao.toCliente(helper);
+        log.debug("Criar vendedor: {}", requisicao);
+        var vendedor = requisicao.toVendedor(helper);
 
-        var clienteRetorno = clienteService.criar(cliente);
+        var clienteRetorno = vendedorService.criar(vendedor);
 
         Set<EnderecoResponse> enderecosResp = helper.toEnderecoResponse(clienteRetorno.getEnderecos());
 
         return ServiceResponse.<PessoaResponse>builder()
-                .result(helper.toClienteResponse(clienteRetorno, enderecosResp)
+                .result(helper.toVendedorResponse(clienteRetorno, enderecosResp)
                 ).mensagens(
                         Collections.singletonList(new ServiceResponse.Mensagem(
                                 Mensagem.SUCESSO.getCodigo(), Mensagem.SUCESSO.getDescricao())))
@@ -52,33 +53,33 @@ public class ClienteResourceAdm implements ClienteApiAdm {
     }
 
     @Override
-    public ServiceResponse<Cliente> alterar(String idCliente, PessoaEditarRequest clienteEditarRequest) {
-        log.debug("Alterar cliente: {}", idCliente);
-        final ServiceResponse<Cliente> serviceResponse = new ServiceResponse<>();
-        Optional<Cliente> clienteOptional = repository.findById(idCliente);
+    public ServiceResponse<Vendedor> alterar(String id, PessoaEditarRequest vendedorEditarRequest) {
+        log.debug("Alterar vendedor: {}", id);
+        final ServiceResponse<Vendedor> serviceResponse = new ServiceResponse<>();
+        Optional<Vendedor> vendedorOptional = repository.findById(id);
 
-        if(!clienteOptional.isPresent()){
+        if(!vendedorOptional.isPresent()){
             serviceResponse.addMensagem(Mensagem.NAO_ENCONTRADO.getCodigo(), Mensagem.NAO_ENCONTRADO.getDescricao());
             serviceResponse.setStatus(HttpStatus.NOT_FOUND);
             return serviceResponse;
         }
 
-        Cliente cliente = clienteService.alterar(clienteEditarRequest.updateCliente(clienteOptional.get()));
+        Vendedor vendedor = vendedorService.alterar(vendedorEditarRequest.updateVendedor(vendedorOptional.get()));
 
         serviceResponse.addMensagem(Mensagem.SUCESSO.getCodigo(), Mensagem.SUCESSO.getDescricao());
-        serviceResponse.setResult(cliente);
+        serviceResponse.setResult(vendedor);
         serviceResponse.setStatus(HttpStatus.OK);
 
         return serviceResponse;
     }
 
     @Override
-    public ServiceResponse<Boolean> excluir(String idCliente) {
-        log.debug("Remoção do cliente: {}", idCliente);
+    public ServiceResponse<Boolean> excluir(String id) {
+        log.debug("Remoção do vendedor: {}", id);
         final ServiceResponse<Boolean> serviceResponse = new ServiceResponse<>();
 
-        Optional<Cliente> clienteOptional = repository.findById(idCliente);
-        if(!clienteOptional.isPresent()){
+        Optional<Vendedor> vendedorOptional = repository.findById(id);
+        if(!vendedorOptional.isPresent()){
 
             serviceResponse.setResult(Boolean.FALSE);
             serviceResponse.addMensagem(Mensagem.NAO_ENCONTRADO.getCodigo(), Mensagem.NAO_ENCONTRADO.getDescricao());
@@ -87,7 +88,7 @@ public class ClienteResourceAdm implements ClienteApiAdm {
             return serviceResponse;
         }
 
-        clienteService.excluir(clienteOptional.get());
+        vendedorService.excluir(vendedorOptional.get());
         serviceResponse.addMensagem(Mensagem.SUCESSO.getCodigo(), Mensagem.SUCESSO.getDescricao());
         serviceResponse.setResult(Boolean.TRUE);
         serviceResponse.setStatus(HttpStatus.OK);
@@ -98,20 +99,20 @@ public class ClienteResourceAdm implements ClienteApiAdm {
 
     @Override
     public ServiceResponse<PessoaResponse> consultar(String nomeCliente) {
-        log.debug("Consultar cliente: {}", nomeCliente);
+        log.debug("Consultar vendedor: {}", nomeCliente);
         final ServiceResponse<PessoaResponse> serviceResponse = new ServiceResponse<>();
 
-        Optional<Cliente> clienteOpt = repository.findByNome(nomeCliente);
+        Optional<Vendedor> vendedorOptional = repository.findByNome(nomeCliente);
 
-        if(clienteOpt.isPresent()){
-            Cliente cliente = clienteOpt.get();
+        if(vendedorOptional.isPresent()){
+            Vendedor vendedor = vendedorOptional.get();
 
-            Set<EnderecoResponse> enderecos = helper.toEnderecoResponse(cliente.getEnderecos());
+            Set<EnderecoResponse> enderecos = helper.toEnderecoResponse(vendedor.getEnderecos());
 
-            serviceResponse.setResult(helper.toClienteResponse(cliente, enderecos));
+            serviceResponse.setResult(helper.toVendedorResponse(vendedor, enderecos));
             serviceResponse.addMensagem(Mensagem.SUCESSO.getCodigo(), Mensagem.SUCESSO.getDescricao());
             serviceResponse.setStatus(HttpStatus.OK);
-            log.debug("Resultado da consulta de clientes: {}", serviceResponse.getResult());
+            log.debug("Resultado da consulta de vendedores: {}", serviceResponse.getResult());
             return serviceResponse;
         }
 
@@ -125,9 +126,9 @@ public class ClienteResourceAdm implements ClienteApiAdm {
         ServicePageableResponse<List<PessoaResultResponse>> response =
                 new ServicePageableResponse<>();
 
-        Specification<Cliente> criteria = helper.getCriteria(searchCriteria);
+        Specification<Vendedor> criteria = helper.getCriteria(searchCriteria);
 
-        Page<Cliente> pages = clienteService.listar(criteria, searchCriteria, sortBy);
+        Page<Vendedor> pages = vendedorService.listar(criteria, searchCriteria, sortBy);
         response.addMensagem(Mensagem.SUCESSO.getCodigo(), Mensagem.SUCESSO.getDescricao());
 
         var pageMetadata =
@@ -136,7 +137,7 @@ public class ClienteResourceAdm implements ClienteApiAdm {
                         (long) searchCriteria.getOffset(),
                         (long) searchCriteria.getLimit());
 
-        Page<PessoaResultResponse> docs = helper.toClienteResponse(pages);
+        Page<PessoaResultResponse> docs = helper.toVendedorResponse(pages);
 
         response.setMetadata(pageMetadata);
         response.setResult(docs.getContent());
