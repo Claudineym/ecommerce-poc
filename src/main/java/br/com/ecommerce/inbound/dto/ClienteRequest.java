@@ -9,7 +9,6 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.Set;
-import java.util.UUID;
 
 @Builder
 public class ClienteRequest {
@@ -26,17 +25,7 @@ public class ClienteRequest {
     private Set<EnderecoRequest> enderecos;
 
     public Cliente toCliente(){
-        Cliente cliente =  Cliente
-                            .builder()
-                            .idCliente(UUID.randomUUID().toString())
-                            .nome(this.nome)
-                            .email(this.email)
-                            .celular(this.celular)
-                            .dtNascimento(this.dtNascimento)
-                            .build();
-
-        cliente.setEnderecos(helper.toEndereco(this.enderecos));
-
-        return cliente;
+        return new Cliente(this.nome, this.sexo, this.dtNascimento, this.celular,
+                this.email, helper.toEndereco(this.enderecos));
     }
 }

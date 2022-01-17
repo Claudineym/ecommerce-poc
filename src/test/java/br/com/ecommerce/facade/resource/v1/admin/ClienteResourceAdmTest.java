@@ -1,16 +1,20 @@
 package br.com.ecommerce.facade.resource.v1.admin;
 
+import br.com.ecommerce.business.domain.entity.Cliente;
 import br.com.ecommerce.business.domain.service.ClienteService;
+import br.com.ecommerce.business.domain.service.helper.ClienteServiceHelper;
 import br.com.ecommerce.common.resource.ServiceResponse;
 import br.com.ecommerce.inbound.dto.ClienteResponse;
 import br.com.ecommerce.inbound.dto.ClienteSearchCriteria;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -33,22 +37,22 @@ public class ClienteResourceAdmTest extends ClienteResourceAdmTestBaseTest {
     private MockMvc mockMvc;
     @MockBean
     private ClienteService clienteService;
+    @MockBean
+    private ClienteServiceHelper helper;
 
     @Test
     @DisplayName("Teste consutar cliente com sucesso")
     void deveConsutar_cliente_comSucesso() throws Exception {
-        given(clienteService.consultar("Fulano01 da Silva")).willReturn(gerarClienteResponse());
-        mockMvc.perform(get(PATH+"/"+gerarClienteResponse().getResult().getNome()))
+        mockMvc.perform(get(PATH+"/"+gerarCliente().getNome()))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.result.nome", is(gerarClienteResponse().getResult().getNome())));
+                .andExpect(jsonPath("$.result.nome", is(gerarCliente().getNome())));
     }
 
     @Test
     @DisplayName("Teste consutar cliente não encontrado")
     void deveConsutar_cliente_nao_encontrado() throws Exception {
         String nomeCliente = "teste";
-        given(clienteService.consultar(nomeCliente)).willReturn(gerarClienteNaoEncontradoResponse(nomeCliente));
         mockMvc.perform(get(PATH+"/"+nomeCliente))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -58,7 +62,10 @@ public class ClienteResourceAdmTest extends ClienteResourceAdmTestBaseTest {
     @Test
     @DisplayName("Teste para trazer todos Clientes")
     void deveTrazerTodosClientes() throws Exception {
-        given(clienteService.listar(ClienteSearchCriteria.builder().offset(0).limit(10).build(), Set.of("idCliente.desc"))).willReturn(listar());
+        ClienteSearchCriteria searchCriteria = ClienteSearchCriteria.builder().offset(0).limit(10).build();
+        Specification<Cliente> criteria = helper.getCriteria(searchCriteria);
+
+        given(clienteService.listar(criteria, searchCriteria, Set.of("idCliente.desc"))).willReturn(listar());
         mockMvc.perform(get(PATH))
                 .andDo(print())
                 .andExpect(status().isOk());
@@ -100,11 +107,10 @@ public class ClienteResourceAdmTest extends ClienteResourceAdmTestBaseTest {
     void deveExcluirCliente_comSucesso() throws  Exception {
         final ServiceResponse<Boolean> serviceResponse = new ServiceResponse<>();
         serviceResponse.setResult(true);
-        ServiceResponse<ClienteResponse> cliente = gerarClienteResponse();
-        given(clienteService.consultar(cliente.getResult().getNome())).willReturn(gerarClienteResponse());
-        when(clienteService.excluir(cliente.getResult().getId())).thenReturn(serviceResponse);
+        Cliente cliente = gerarCliente();
+        Mockito.doNothing().when(clienteService).excluir(cliente);
 
-        mockMvc.perform(delete(PATH+"/"+cliente.getResult().getId())
+        mockMvc.perform(delete(PATH+"/"+cliente)
                         .header(AUTH, BEARER_TOKEN)
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk())
@@ -117,11 +123,10 @@ public class ClienteResourceAdmTest extends ClienteResourceAdmTestBaseTest {
     void deveExcluirCliente_comErro() throws  Exception {
         final ServiceResponse<Boolean> serviceResponse = new ServiceResponse<>();
         serviceResponse.setResult(false);
-        ServiceResponse<ClienteResponse> cliente = gerarClienteResponse();
-        given(clienteService.consultar(cliente.getResult().getNome())).willReturn(gerarClienteResponse());
-        when(clienteService.excluir(cliente.getResult().getId())).thenReturn(serviceResponse);
+        Cliente cliente = gerarCliente();
+        Mockito.doNothing().when(clienteService).excluir(any());
 
-        mockMvc.perform(delete(PATH+"/"+cliente.getResult().getId())
+        mockMvc.perform(delete(PATH+"/"+cliente)
                         .header(AUTH, BEARER_TOKEN)
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk())

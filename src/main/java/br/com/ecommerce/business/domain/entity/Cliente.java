@@ -10,13 +10,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter @Setter
 @Entity
-public class Cliente implements Serializable {
-    private static final long serialVersionUID = -861235869034747900L;
+public class Cliente {
     @Id
     private String idCliente;
     private String nome;
@@ -31,4 +28,14 @@ public class Cliente implements Serializable {
             joinColumns={@JoinColumn(name = "CLIENTE_ID")},
             inverseJoinColumns={@JoinColumn(name = "ENDERECO_ID")})
     private Set<Endereco> enderecos;
+
+    public Cliente(String nome, Sexo sexo, Date dtNascimento, String celular, String email, Set<Endereco> enderecos) {
+        this.idCliente = UUID.randomUUID().toString();
+        this.nome = nome;
+        this.sexo = sexo;
+        this.dtNascimento = dtNascimento;
+        this.celular = celular;
+        this.email = email;
+        this.enderecos = enderecos;
+    }
 }

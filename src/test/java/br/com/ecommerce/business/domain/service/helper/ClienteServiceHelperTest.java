@@ -102,13 +102,9 @@ public class ClienteServiceHelperTest {
                 Sort.NullHandling.NATIVE);
     }
 
-    public ClienteResponse toClienteResponse(Cliente cliente, Set<EnderecoResponse> enderecos){
-        return  ClienteResponse.builder()
-                .id(cliente.getIdCliente().toString())
-                .nome(cliente.getNome())
-                .celular(cliente.getCelular())
-                .email(cliente.getEmail())
-                .enderecos(enderecos).build();
+    public Cliente toCliente(Cliente cliente, Set<Endereco> enderecos){
+        cliente.setEnderecos(enderecos);
+        return cliente;
     }
 
     public Set<EnderecoResponse> toEnderecoResponse(Set<Endereco> enderecos){

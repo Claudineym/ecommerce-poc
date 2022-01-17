@@ -36,43 +36,30 @@ public class ClienteResourceAdmTestBaseTest extends ClienteServiceHelperTest {
         listar();
     }
 
-    protected ServicePageableResponse<List<ClienteResultResponse>> listar(){
+    protected Page<Cliente> listar(){
         ServicePageableResponse<List<ClienteResultResponse>> response =
                 new ServicePageableResponse<>();
         Page<Cliente> pages = new PageImpl(gerarListaDeClientes());
-        var pageMetadata =
-                new PageMetadata(
-                        pages.getTotalElements(),
-                        (long) 0,
-                        (long) 10);
-        Page<ClienteResultResponse> docs = toClienteResponse(pages);
-
-        response.setMetadata(pageMetadata);
-        response.setResult(docs.getContent());
-        return response;
+        return pages;
     }
 
     protected Cliente gerarCliente() {
-        return Cliente.builder().idCliente("0d25b4ed-f641-4220-8365-7ad4add4ea63cd")
-                .nome("Fulano01 da Silva").celular("11985263236").email("fulano01@gmail.com")
-                .dtNascimento(new Date()).enderecos(new HashSet<Endereco>(Collections.singletonList(Endereco.builder().endereco("Rua tal 01").bairro("Tal")
-                        .cep("11250000").cidade("São Paulo").estado(Estado.SAO_PAULO).build()))).build();
+        return new Cliente("Fulano01 da Silva", Sexo.MASCULINO, new Date(), "11985263236", "fulano01@gmail.com",
+                (new HashSet<Endereco>(Collections.singletonList(Endereco.builder().endereco("Rua tal 01").bairro("Tal")
+                .cep("11250000").cidade("São Paulo").estado(Estado.SAO_PAULO).build()))));
     }
 
     protected List<Cliente> gerarListaDeClientes(){
         this.clientes = new ArrayList<>();
-        this.clientes.add(Cliente.builder().idCliente("0d25b4ed-f641-4220-8365-7ad4add4ea63cd")
-                .nome("Fulano01 da Silva").celular("11985263236").email("fulano01@gmail.com")
-                .dtNascimento(new Date()).enderecos(new HashSet<Endereco>(Collections.singletonList(Endereco.builder().endereco("Rua tal 01").bairro("Tal")
-                        .cep("11250000").cidade("São Paulo").estado(Estado.SAO_PAULO).build()))).build());
-        this.clientes.add(Cliente.builder().idCliente("0d25b4ed-f641-4220-8365-7ad4add4ea645o")
-                .nome("Fulano02 de Oliveira").celular("16985863288").email("fulano02@bol.com.br")
-                .dtNascimento(new Date()).enderecos(new HashSet<Endereco>(Collections.singletonList(Endereco.builder().endereco("Rua tal 02").bairro("Tal Ribeirão")
-                        .cep("55250000").cidade("Ribeirão Preto").estado(Estado.SAO_PAULO).build()))).build());
-        this.clientes.add(Cliente.builder().idCliente("0d25b4ed-f641-4220-8365-58j4add4ea645l")
-                .nome("Fulano03 Duarte").celular("31985863698").email("fulano03@uai.com.br")
-                .dtNascimento(new Date()).enderecos(new HashSet<Endereco>(Collections.singletonList(Endereco.builder().endereco("Rua tal 03").bairro("Centro")
-                        .cep("38250000").cidade("Belo Horizonte").estado(Estado.SAO_PAULO).build()))).build());
+        this.clientes.add(new Cliente("Fulano01 da Silva", Sexo.MASCULINO, new Date(), "11985263236", "fulano02@bol.com.br",
+                (new HashSet<Endereco>(Collections.singletonList(Endereco.builder().endereco("Rua tal 01").bairro("Tal")
+                        .cep("11250000").cidade("São Paulo").estado(Estado.SAO_PAULO).build())))));
+        this.clientes.add(new Cliente("Fulano02 de Oliveira", Sexo.MASCULINO, new Date(), "11985263236", "fulano01@gmail.com",
+                (new HashSet<Endereco>(Collections.singletonList(Endereco.builder().endereco("Rua tal 02").bairro("Tal Ribeirão")
+                        .cep("55250000").cidade("Ribeirão Preto").estado(Estado.SAO_PAULO).build())))));
+        this.clientes.add(new Cliente("Fulano03 Duarte", Sexo.MASCULINO, new Date(), "31985863698", "fulano03@uai.com.br",
+                (new HashSet<Endereco>(Collections.singletonList(Endereco.builder().endereco("Rua tal 03").bairro("Centro")
+                        .cep("38250000").cidade("Belo Horizonte").estado(Estado.SAO_PAULO).build())))));
         return this.clientes;
     }
 
@@ -92,20 +79,6 @@ public class ClienteResourceAdmTestBaseTest extends ClienteServiceHelperTest {
                             .estado(Estado.SAO_PAULO)
                             .build()))
                     .build();
-    }
-
-    protected ServiceResponse<ClienteResponse> gerarClienteResponse(){
-        final ServiceResponse<ClienteResponse> serviceResponse = new ServiceResponse<>();
-
-        Cliente cliente = Cliente.builder().idCliente("0d25b4ed-f641-4220-8365-7ad4add4ea63cd")
-                .nome("Fulano01 da Silva").celular("11985263236").email("fulano01@gmail.com")
-                .dtNascimento(new Date()).enderecos(new HashSet<Endereco>(Collections.singletonList(Endereco.builder().endereco("Rua tal 01").bairro("Tal")
-                        .cep("11250000").cidade("São Paulo").estado(Estado.SAO_PAULO).build()))).build();
-
-        Set<EnderecoResponse> enderecos = toEnderecoResponse(cliente.getEnderecos());
-
-        serviceResponse.setResult(toClienteResponse(cliente, enderecos));
-        return serviceResponse;
     }
 
     protected ServiceResponse gerarClienteNaoEncontradoResponse(String nomeCliente){
