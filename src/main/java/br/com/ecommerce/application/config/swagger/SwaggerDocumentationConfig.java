@@ -26,15 +26,14 @@ public class SwaggerDocumentationConfig {
 
     private final SwaggerConfigProperties properties;
 
-
-    @Bean
+  /*  @Bean
     public GroupedOpenApi publicApi() {
         return GroupedOpenApi.builder()
-                .packagesToScan("br.com.ecommerce.inbound.facade.resource.v1")
+                .packagesToScan("br.com.ecommerce.inbound.facade.resource.v1.public")
                 .group("ecommerce-public")
                 .pathsToMatch("/v1/public/**")
                 .build();
-    }
+    }*/
     @Bean
     public GroupedOpenApi adminApi() {
         return GroupedOpenApi.builder()
