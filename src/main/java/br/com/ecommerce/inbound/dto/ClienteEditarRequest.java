@@ -9,7 +9,7 @@ import java.util.Date;
 import java.util.Objects;
 import java.util.Set;
 
-public class PessoaEditarRequest {
+public class ClienteEditarRequest {
 
     @JsonProperty private String nome;
     @JsonProperty private Sexo sexo;

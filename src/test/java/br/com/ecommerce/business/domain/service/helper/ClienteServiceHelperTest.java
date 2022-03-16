@@ -2,7 +2,7 @@ package br.com.ecommerce.business.domain.service.helper;
 
 import br.com.ecommerce.business.domain.entity.Cliente;
 import br.com.ecommerce.business.domain.entity.Endereco;
-import br.com.ecommerce.inbound.dto.PessoaSearchCriteria;
+import br.com.ecommerce.inbound.dto.ClienteSearchCriteria;
 import br.com.ecommerce.inbound.dto.EnderecoRequest;
 import br.com.ecommerce.inbound.dto.EnderecoResponse;
 import br.com.ecommerce.outbound.dto.PessoaResultResponse;
@@ -52,7 +52,7 @@ public class ClienteServiceHelperTest {
     }
 
     public Specification<Cliente> getCriteria(
-            PessoaSearchCriteria searchCriteria) {
+            ClienteSearchCriteria searchCriteria) {
 
         return (root, query, criteriaBuilder) ->
                 criteriaBuilder.and(buildPredicates(root, criteriaBuilder, searchCriteria));
@@ -61,13 +61,13 @@ public class ClienteServiceHelperTest {
     public Predicate[] buildPredicates(
             Root<Cliente> root,
             CriteriaBuilder criteriaBuilder,
-            PessoaSearchCriteria searchCriteria) {
+            ClienteSearchCriteria searchCriteria) {
         List<Predicate> predicates = new ArrayList<>();
 
         return predicates.toArray(new Predicate[0]);
     }
 
-    public PageRequest buildPaging(PessoaSearchCriteria criteria, Set<String> sortBy) {
+    public PageRequest buildPaging(ClienteSearchCriteria criteria, Set<String> sortBy) {
         return PageRequest.of(
                 criteria.getOffset(),
                 criteria.getLimit(),

@@ -4,7 +4,7 @@ import br.com.ecommerce.business.domain.entity.Vendedor;
 import br.com.ecommerce.business.domain.repository.PagingAndSortingVendedorRepository;
 import br.com.ecommerce.business.domain.repository.VendedorRepository;
 import br.com.ecommerce.business.domain.service.helper.ClienteServiceHelper;
-import br.com.ecommerce.inbound.dto.PessoaSearchCriteria;
+import br.com.ecommerce.inbound.dto.ClienteSearchCriteria;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -26,7 +26,7 @@ public class VendedorService {
        return repository.save(vendedor);
     }
 
-    public Page<Vendedor> listar(Specification<Vendedor> criteria, PessoaSearchCriteria searchCriteria, Set<String> sortBy) {
+    public Page<Vendedor> listar(Specification<Vendedor> criteria, ClienteSearchCriteria searchCriteria, Set<String> sortBy) {
         var paging = helper.buildPaging(searchCriteria, sortBy == null ? Set.of("id") : sortBy);
         Page<Vendedor> pages = pagingAndSortingRepository.findAll(criteria, paging);
         return pages;

@@ -6,14 +6,17 @@ import br.com.ecommerce.business.domain.entity.Vendedor;
 import br.com.ecommerce.business.domain.service.helper.ClienteServiceHelper;
 import br.com.ecommerce.business.domain.service.helper.VendedorServiceHelper;
 import lombok.Builder;
+import lombok.Getter;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.Set;
+import java.util.UUID;
 
 @Builder
-public class PessoaRequest {
+@Getter
+public class ClienteRequest {
 
     @NotNull(message = "Nome não pode ser nulo")
     @NotEmpty(message = "Nome não pode ser vazio")
@@ -26,11 +29,6 @@ public class PessoaRequest {
 
     public Cliente toCliente(ClienteServiceHelper helper){
         return new Cliente(this.nome, this.sexo, this.dtNascimento, this.celular,
-                this.email, helper.toEndereco(this.enderecos));
-    }
-
-    public Vendedor toVendedor(VendedorServiceHelper helper) {
-        return new Vendedor(this.nome, this.sexo, this.dtNascimento, this.celular,
                 this.email, helper.toEndereco(this.enderecos));
     }
 }

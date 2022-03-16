@@ -8,7 +8,7 @@ import br.com.ecommerce.business.domain.service.helper.ClienteServiceHelperTest;
 import br.com.ecommerce.common.message.Mensagem;
 import br.com.ecommerce.common.resource.ServicePageableResponse;
 import br.com.ecommerce.common.resource.ServiceResponse;
-import br.com.ecommerce.inbound.dto.PessoaRequest;
+import br.com.ecommerce.inbound.dto.ClienteRequest;
 import br.com.ecommerce.inbound.dto.EnderecoRequest;
 import br.com.ecommerce.outbound.dto.PessoaResultResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -60,8 +60,8 @@ public class ClienteResourceAdmTestBaseTest extends ClienteServiceHelperTest {
         return this.clientes;
     }
 
-    protected PessoaRequest gerarClienteRequest() {
-        return PessoaRequest.builder()
+    protected ClienteRequest gerarClienteRequest() {
+        return ClienteRequest.builder()
                     .nome("Luiz da Silva")
                     .celular("11988252536")
                     .email("lsilva@gmail.com")

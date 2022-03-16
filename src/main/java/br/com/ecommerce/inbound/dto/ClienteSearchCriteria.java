@@ -13,7 +13,7 @@ import javax.validation.constraints.PositiveOrZero;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class PessoaSearchCriteria {
+public class ClienteSearchCriteria {
 
     @PositiveOrZero(message = "Limit não pode ser negativo")
     @Min(value = 1, message = "Limite de resultados não pode ser igual a Zero ou Negativo")

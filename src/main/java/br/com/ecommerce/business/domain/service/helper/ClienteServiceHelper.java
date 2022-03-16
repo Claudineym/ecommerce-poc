@@ -2,10 +2,8 @@ package br.com.ecommerce.business.domain.service.helper;
 
 import br.com.ecommerce.business.domain.entity.Cliente;
 import br.com.ecommerce.business.domain.entity.Endereco;
-import br.com.ecommerce.inbound.dto.PessoaResponse;
-import br.com.ecommerce.inbound.dto.PessoaSearchCriteria;
-import br.com.ecommerce.inbound.dto.EnderecoRequest;
-import br.com.ecommerce.inbound.dto.EnderecoResponse;
+import br.com.ecommerce.business.domain.entity.Vendedor;
+import br.com.ecommerce.inbound.dto.*;
 import br.com.ecommerce.outbound.dto.PessoaResultResponse;
 import com.google.common.base.Preconditions;
 import org.springframework.data.domain.Page;
@@ -53,7 +51,7 @@ public class ClienteServiceHelper {
     }
 
     public Specification<Cliente> getCriteria(
-            PessoaSearchCriteria searchCriteria) {
+            ClienteSearchCriteria searchCriteria) {
 
         return (root, query, criteriaBuilder) ->
                 criteriaBuilder.and(buildPredicates(root, criteriaBuilder, searchCriteria));
@@ -62,13 +60,13 @@ public class ClienteServiceHelper {
     public Predicate[] buildPredicates(
             Root<Cliente> root,
             CriteriaBuilder criteriaBuilder,
-            PessoaSearchCriteria searchCriteria) {
+            ClienteSearchCriteria searchCriteria) {
         List<Predicate> predicates = new ArrayList<>();
 
         return predicates.toArray(new Predicate[0]);
     }
 
-    public PageRequest buildPaging(PessoaSearchCriteria criteria, Set<String> sortBy) {
+    public PageRequest buildPaging(ClienteSearchCriteria criteria, Set<String> sortBy) {
         return PageRequest.of(
                 criteria.getOffset(),
                 criteria.getLimit(),
@@ -101,8 +99,8 @@ public class ClienteServiceHelper {
                 Sort.NullHandling.NATIVE);
     }
 
-    public PessoaResponse toClienteResponse(Cliente cliente, Set<EnderecoResponse> enderecos){
-        return  PessoaResponse.builder()
+    public ClienteResponse toClienteResponse(Cliente cliente, Set<EnderecoResponse> enderecos){
+        return  ClienteResponse.builder()
                 .id(cliente.getId())
                 .nome(cliente.getNome())
                 .celular(cliente.getCelular())
@@ -144,4 +142,13 @@ public class ClienteServiceHelper {
                             .build();
                 }).collect(Collectors.toSet());
     }
+
+    public VendedorResponse toVendedorResponse(Vendedor vendedor){
+        return  VendedorResponse.builder()
+                .id(vendedor.getId())
+                .nome(vendedor.getNome())
+                .celular(vendedor.getCelular())
+                .email(vendedor.getEmail()).build();
+    }
+
 }

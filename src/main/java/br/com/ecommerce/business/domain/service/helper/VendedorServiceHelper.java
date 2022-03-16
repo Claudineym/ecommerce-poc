@@ -2,10 +2,10 @@ package br.com.ecommerce.business.domain.service.helper;
 
 import br.com.ecommerce.business.domain.entity.Endereco;
 import br.com.ecommerce.business.domain.entity.Vendedor;
-import br.com.ecommerce.inbound.dto.PessoaSearchCriteria;
+import br.com.ecommerce.inbound.dto.ClienteSearchCriteria;
 import br.com.ecommerce.inbound.dto.EnderecoRequest;
 import br.com.ecommerce.inbound.dto.EnderecoResponse;
-import br.com.ecommerce.inbound.dto.PessoaResponse;
+import br.com.ecommerce.inbound.dto.ClienteResponse;
 import br.com.ecommerce.outbound.dto.PessoaResultResponse;
 import com.google.common.base.Preconditions;
 import org.springframework.data.domain.Page;
@@ -53,7 +53,7 @@ public class VendedorServiceHelper {
     }
 
     public Specification<Vendedor> getCriteria(
-            PessoaSearchCriteria searchCriteria) {
+            ClienteSearchCriteria searchCriteria) {
 
         return (root, query, criteriaBuilder) ->
                 criteriaBuilder.and(buildPredicates(root, criteriaBuilder, searchCriteria));
@@ -62,13 +62,13 @@ public class VendedorServiceHelper {
     public Predicate[] buildPredicates(
             Root<Vendedor> root,
             CriteriaBuilder criteriaBuilder,
-            PessoaSearchCriteria searchCriteria) {
+            ClienteSearchCriteria searchCriteria) {
         List<Predicate> predicates = new ArrayList<>();
 
         return predicates.toArray(new Predicate[0]);
     }
 
-    public PageRequest buildPaging(PessoaSearchCriteria criteria, Set<String> sortBy) {
+    public PageRequest buildPaging(ClienteSearchCriteria criteria, Set<String> sortBy) {
         return PageRequest.of(
                 criteria.getOffset(),
                 criteria.getLimit(),
@@ -101,8 +101,8 @@ public class VendedorServiceHelper {
                 Sort.NullHandling.NATIVE);
     }
 
-    public PessoaResponse toVendedorResponse(Vendedor vendedor, Set<EnderecoResponse> enderecos){
-        return  PessoaResponse.builder()
+    public ClienteResponse toVendedorResponse(Vendedor vendedor, Set<EnderecoResponse> enderecos){
+        return  ClienteResponse.builder()
                 .id(vendedor.getId())
                 .nome(vendedor.getNome())
                 .celular(vendedor.getCelular())

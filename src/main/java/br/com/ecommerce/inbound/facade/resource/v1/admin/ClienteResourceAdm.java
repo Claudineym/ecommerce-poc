@@ -1,6 +1,7 @@
 package br.com.ecommerce.inbound.facade.resource.v1.admin;
 
 import br.com.ecommerce.business.domain.entity.Cliente;
+import br.com.ecommerce.business.domain.entity.Vendedor;
 import br.com.ecommerce.business.domain.repository.ClienteRepository;
 import br.com.ecommerce.business.domain.service.ClienteService;
 import br.com.ecommerce.business.domain.service.helper.ClienteServiceHelper;
@@ -35,7 +36,7 @@ public class ClienteResourceAdm implements ClienteApiAdm {
     private final ClienteServiceHelper helper;
 
     @Override
-    public ServiceResponse<PessoaResponse> criar(PessoaRequest requisicao) {
+    public ServiceResponse<ClienteResponse> criar(ClienteRequest requisicao) {
         log.debug("Criar cliente: {}", requisicao);
         var cliente = requisicao.toCliente(helper);
 
@@ -43,7 +44,7 @@ public class ClienteResourceAdm implements ClienteApiAdm {
 
         Set<EnderecoResponse> enderecosResp = helper.toEnderecoResponse(clienteRetorno.getEnderecos());
 
-        return ServiceResponse.<PessoaResponse>builder()
+        return ServiceResponse.<ClienteResponse>builder()
                 .result(helper.toClienteResponse(clienteRetorno, enderecosResp)
                 ).mensagens(
                         Collections.singletonList(new ServiceResponse.Mensagem(
@@ -52,7 +53,7 @@ public class ClienteResourceAdm implements ClienteApiAdm {
     }
 
     @Override
-    public ServiceResponse<Cliente> alterar(String idCliente, PessoaEditarRequest clienteEditarRequest) {
+    public ServiceResponse<Cliente> alterar(String idCliente, ClienteEditarRequest clienteEditarRequest) {
         log.debug("Alterar cliente: {}", idCliente);
         final ServiceResponse<Cliente> serviceResponse = new ServiceResponse<>();
         Optional<Cliente> clienteOptional = repository.findById(idCliente);
@@ -97,9 +98,9 @@ public class ClienteResourceAdm implements ClienteApiAdm {
     }
 
     @Override
-    public ServiceResponse<PessoaResponse> consultar(String nomeCliente) {
+    public ServiceResponse<ClienteResponse> consultar(String nomeCliente) {
         log.debug("Consultar cliente: {}", nomeCliente);
-        final ServiceResponse<PessoaResponse> serviceResponse = new ServiceResponse<>();
+        final ServiceResponse<ClienteResponse> serviceResponse = new ServiceResponse<>();
 
         Optional<Cliente> clienteOpt = repository.findByNome(nomeCliente);
 
@@ -121,7 +122,7 @@ public class ClienteResourceAdm implements ClienteApiAdm {
     }
 
     @Override
-    public ServicePageableResponse<List<PessoaResultResponse>> listar(PessoaSearchCriteria searchCriteria, Set<String> sortBy) {
+    public ServicePageableResponse<List<PessoaResultResponse>> listar(ClienteSearchCriteria searchCriteria, Set<String> sortBy) {
         ServicePageableResponse<List<PessoaResultResponse>> response =
                 new ServicePageableResponse<>();
 
@@ -142,5 +143,24 @@ public class ClienteResourceAdm implements ClienteApiAdm {
         response.setResult(docs.getContent());
 
         return response;
+    }
+
+    @Override
+    public ServiceResponse<VendedorResponse> transformarEmVendedor(String idCliente) {
+        Optional<Cliente> clienteOptional = repository.findById(idCliente);
+        final ServiceResponse<VendedorResponse> serviceResponse = new ServiceResponse<>();
+
+        if(!clienteOptional.isPresent()) {
+            serviceResponse.addMensagem(Mensagem.NAO_ENCONTRADO.getCodigo(),
+                    Mensagem.NAO_ENCONTRADO.getDescricao());
+        }
+
+        Vendedor vendedor = clienteService.transformarEmVendedor(clienteOptional.get());
+        serviceResponse.setResult(helper.toVendedorResponse(vendedor));
+        serviceResponse.addMensagem(Mensagem.SUCESSO.getCodigo(), Mensagem.SUCESSO.getDescricao());
+        serviceResponse.setStatus(HttpStatus.OK);
+
+        log.debug("Resultado da consulta de clientes: {}", serviceResponse.getResult());
+        return serviceResponse;
     }
 }

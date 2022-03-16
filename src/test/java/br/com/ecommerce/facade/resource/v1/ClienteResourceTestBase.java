@@ -2,7 +2,7 @@ package br.com.ecommerce.facade.resource.v1;
 
 import br.com.ecommerce.business.domain.entity.Estado;
 import br.com.ecommerce.business.domain.entity.Sexo;
-import br.com.ecommerce.inbound.dto.PessoaRequest;
+import br.com.ecommerce.inbound.dto.ClienteRequest;
 import br.com.ecommerce.inbound.dto.EnderecoRequest;
 import lombok.extern.slf4j.Slf4j;
 
@@ -17,8 +17,8 @@ public class ClienteResourceTestBase {
     public static final String PATH = "/v1/clientes/";
     public static final String ID_REQUESICAO = "0d25b4ed-f641-4220-8365-7ad4add4ea63";
 
-    protected PessoaRequest gerarClienteRequest() {
-        return PessoaRequest.builder()
+    protected ClienteRequest gerarClienteRequest() {
+        return ClienteRequest.builder()
                     .nome("Luiz da Silva")
                     .celular("11988252536")
                     .email("lsilva@gmail.com")

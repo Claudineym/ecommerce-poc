@@ -5,10 +5,7 @@ import br.com.ecommerce.common.enums.SortByAllowedFields;
 import br.com.ecommerce.common.resource.ServicePageableResponse;
 import br.com.ecommerce.common.resource.ServiceResponse;
 import br.com.ecommerce.common.validator.SortByFields;
-import br.com.ecommerce.inbound.dto.PessoaEditarRequest;
-import br.com.ecommerce.inbound.dto.PessoaRequest;
-import br.com.ecommerce.inbound.dto.PessoaResponse;
-import br.com.ecommerce.inbound.dto.PessoaSearchCriteria;
+import br.com.ecommerce.inbound.dto.*;
 import br.com.ecommerce.outbound.dto.PessoaResultResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -39,10 +36,10 @@ public interface ClienteApiAdm {
             @ApiResponse(responseCode = "200", description = "Documentos retornados com sucesso",
                     content = @Content( mediaType = "application/json",
                             array = @ArraySchema(
-                                    schema = @Schema(implementation = PessoaResponse.class))))
+                                    schema = @Schema(implementation = ClienteResponse.class))))
     })
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ServiceResponse<PessoaResponse> criar(@Valid @RequestBody PessoaRequest requisicao);
+    public ServiceResponse<ClienteResponse> criar(@Valid @RequestBody ClienteRequest requisicao);
 
 
     @Operation(summary = "Operação responsável por alterar as informações do cliente.",
@@ -53,7 +50,7 @@ public interface ClienteApiAdm {
     @PatchMapping(consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE,
             path = "/{}")
-    public ServiceResponse<Cliente> alterar(@PathVariable("idCliente") String idCliente, @RequestBody PessoaEditarRequest cliente);
+    public ServiceResponse<Cliente> alterar(@PathVariable("idCliente") String idCliente, @RequestBody ClienteEditarRequest cliente);
 
 
     @Operation(summary = "Operação responsável por excluir o cliente.",
@@ -71,7 +68,7 @@ public interface ClienteApiAdm {
             @ApiResponse(responseCode = "200", description = "Sucesso."),
             @ApiResponse(responseCode = "200", description = "Cliente não encontrado.") })
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, path = "/{nomeCliente}")
-    ServiceResponse<PessoaResponse> consultar(@PathVariable("nomeCliente") String nomeCliente);
+    ServiceResponse<ClienteResponse> consultar(@PathVariable("nomeCliente") String nomeCliente);
 
 
     @Operation(summary = "Operação responsável por listar clientes.",
@@ -81,8 +78,19 @@ public interface ClienteApiAdm {
             @ApiResponse(responseCode = "400", description = "Inválido.") })
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     ServicePageableResponse<List<PessoaResultResponse>> listar(
-            @Validated PessoaSearchCriteria searchCriteria,
+            @Validated ClienteSearchCriteria searchCriteria,
             @RequestParam(value = SORT_BY, required = false)
             @SortByFields(enumClass = SortByAllowedFields.class, message = INVALID_SORT_FIELD)
                     Set<String> sortBy);
+
+    @Operation(summary = "Transformar o cliente em Vendedor no sistema de ecommerce",
+            description = "Retorna vendedor", security = {@SecurityRequirement(name = "Bearer")})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Vendedores retornados com sucesso",
+                    content = @Content( mediaType = "application/json",
+                            array = @ArraySchema(
+                                    schema = @Schema(implementation = ClienteResponse.class))))
+    })
+    @PutMapping(path = "/{idCliente}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ServiceResponse<VendedorResponse> transformarEmVendedor(@PathVariable("idCliente") String idCliente);
 }

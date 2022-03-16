@@ -11,7 +11,7 @@ import java.util.Set;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PessoaResponse {
+public class ClienteResponse {
     private String id;
     private String nome;
     private String celular;

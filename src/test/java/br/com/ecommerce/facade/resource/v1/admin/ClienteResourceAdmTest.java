@@ -1,10 +1,12 @@
 package br.com.ecommerce.facade.resource.v1.admin;
 
 import br.com.ecommerce.business.domain.entity.Cliente;
+import br.com.ecommerce.business.domain.repository.ClienteRepository;
 import br.com.ecommerce.business.domain.service.ClienteService;
 import br.com.ecommerce.business.domain.service.helper.ClienteServiceHelper;
 import br.com.ecommerce.common.resource.ServiceResponse;
-import br.com.ecommerce.inbound.dto.PessoaSearchCriteria;
+import br.com.ecommerce.inbound.dto.ClienteSearchCriteria;
+import br.com.ecommerce.inbound.dto.VendedorResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -35,6 +37,8 @@ public class ClienteResourceAdmTest extends ClienteResourceAdmTestBaseTest {
     @Autowired
     private MockMvc mockMvc;
     @MockBean
+    private ClienteRepository clienteRepository;
+    @MockBean
     private ClienteService clienteService;
     @MockBean
     private ClienteServiceHelper helper;
@@ -61,7 +65,7 @@ public class ClienteResourceAdmTest extends ClienteResourceAdmTestBaseTest {
     @Test
     @DisplayName("Teste para trazer todos Clientes")
     void deveTrazerTodosClientes() throws Exception {
-        PessoaSearchCriteria searchCriteria = PessoaSearchCriteria.builder().offset(0).limit(10).build();
+        ClienteSearchCriteria searchCriteria = ClienteSearchCriteria.builder().offset(0).limit(10).build();
         Specification<Cliente> criteria = helper.getCriteria(searchCriteria);
 
         given(clienteService.listar(criteria, searchCriteria, Set.of("idCliente.desc"))).willReturn(listar());
@@ -76,7 +80,6 @@ public class ClienteResourceAdmTest extends ClienteResourceAdmTestBaseTest {
         ObjectMapper objectMapper = new ObjectMapper();
         final String body =
                 objectMapper.writeValueAsString(gerarClienteRequest());
-
         mockMvc
                 .perform(
                         post(PATH)
@@ -131,5 +134,21 @@ public class ClienteResourceAdmTest extends ClienteResourceAdmTestBaseTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.result", is(false)));
 
+    }
+
+    @Test
+    @DisplayName("Teste transformar Cliente em Vendedor")
+    void deveTransformarClienteEmVendedor_comSucesso() throws Exception {
+        final ServiceResponse<VendedorResponse> serviceResponse = new ServiceResponse<>();
+        Cliente cliente = gerarCliente();
+        when(clienteRepository.findById(cliente.getId())).thenReturn(Optional.ofNullable(cliente));
+
+        given(clienteService.transformarEmVendedor(cliente)).willReturn(cliente.toVendedor());
+
+        mockMvc.perform(put(PATH+"/"+cliente.getId())
+                            .header(AUTH, BEARER_TOKEN)
+                            .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk());
     }
 }
