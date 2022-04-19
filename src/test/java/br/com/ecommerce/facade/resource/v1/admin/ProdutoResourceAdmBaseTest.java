@@ -5,8 +5,8 @@ import br.com.ecommerce.business.domain.service.helper.ClienteServiceHelperTest;
 import br.com.ecommerce.common.message.Mensagem;
 import br.com.ecommerce.common.resource.ServiceResponse;
 import br.com.ecommerce.inbound.dto.ClienteRequest;
-import br.com.ecommerce.inbound.dto.ClienteResponse;
 import br.com.ecommerce.inbound.dto.EnderecoRequest;
+import br.com.ecommerce.inbound.dto.ProdutoRequest;
 import br.com.ecommerce.inbound.dto.ProdutoResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -51,22 +51,14 @@ public class ProdutoResourceAdmBaseTest extends ClienteServiceHelperTest {
         return produtos;
     }
 
-    protected ClienteRequest gerarClienteRequest() {
-        return ClienteRequest.builder()
-                    .nome("Luiz da Silva")
-                    .celular("11988252536")
-                    .email("lsilva@gmail.com")
-                    .dtNascimento(new Date())
-                    .sexo(Sexo.FEMININO)
-                    .enderecos(Set.of(EnderecoRequest
-                            .builder()
-                            .endereco("Rua Fulano")
-                            .bairro("Centro")
-                            .cep("11740123")
-                            .cidade("São Paulo")
-                            .estado(Estado.SAO_PAULO)
-                            .build()))
-                    .build();
+    protected ProdutoRequest gerarProdutoRequest() {
+        return ProdutoRequest.builder()
+                .descProduto("desc produto")
+                .categoriaProduto(new CategoriaProduto("desc categoria produto"))
+                .quantidade(112)
+                .valorPromocial(BigDecimal.valueOf(10.99))
+                .valorUnitario(BigDecimal.valueOf(11.00))
+                .tags("TAGS").build();
     }
 
     protected ProdutoResponse gerarProdutoResponse() {

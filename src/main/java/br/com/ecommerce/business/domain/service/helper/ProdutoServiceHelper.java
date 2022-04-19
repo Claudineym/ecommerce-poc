@@ -1,6 +1,5 @@
 package br.com.ecommerce.business.domain.service.helper;
 
-import br.com.ecommerce.business.domain.entity.Cliente;
 import br.com.ecommerce.business.domain.entity.Produto;
 import br.com.ecommerce.inbound.dto.*;
 import org.springframework.data.domain.Page;

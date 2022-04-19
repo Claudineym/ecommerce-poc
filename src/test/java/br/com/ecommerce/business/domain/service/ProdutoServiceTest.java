@@ -1,6 +1,5 @@
 package br.com.ecommerce.business.domain.service;
 
-import br.com.ecommerce.business.domain.entity.Cliente;
 import br.com.ecommerce.business.domain.entity.Produto;
 import br.com.ecommerce.business.domain.repository.ProdutoRepository;
 import br.com.ecommerce.common.EcommerceTestBase;

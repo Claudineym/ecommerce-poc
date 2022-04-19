@@ -1,12 +1,17 @@
 package br.com.ecommerce.facade.resource.v1.admin;
 
+import br.com.ecommerce.business.domain.entity.CategoriaProduto;
 import br.com.ecommerce.business.domain.entity.Produto;
+import br.com.ecommerce.business.domain.repository.CategoriaProdutoRepository;
 import br.com.ecommerce.business.domain.repository.PagingAndSortingProdutoRepository;
 import br.com.ecommerce.business.domain.repository.ProdutoRepository;
+import br.com.ecommerce.business.domain.service.CategoriaProdutoService;
 import br.com.ecommerce.business.domain.service.ProdutoService;
+import br.com.ecommerce.business.domain.service.helper.CategoriaProdutoServiceHelper;
 import br.com.ecommerce.business.domain.service.helper.ProdutoServiceHelper;
 import br.com.ecommerce.common.helper.UtilServiceHelper;
 import br.com.ecommerce.common.resource.ServiceResponse;
+import br.com.ecommerce.inbound.dto.CategoriaProdutoResponse;
 import br.com.ecommerce.inbound.dto.ProdutoResponse;
 import br.com.ecommerce.inbound.dto.SearchCriteria;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -25,6 +30,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -39,36 +45,35 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class ProdutoResouceAdmTest extends ProdutoResourceAdmBaseTest{
+public class CategoriaProdutoResouceAdmTest extends CategoriaProdutoResourceAdmBaseTest{
 
     @Autowired
     private MockMvc mockMvc;
     @MockBean
-    private ProdutoRepository repository;
+    private CategoriaProdutoRepository repository;
     @MockBean
-    private ProdutoService service;
+    private CategoriaProdutoService service;
     @MockBean
-    private ProdutoServiceHelper helper;
+    private CategoriaProdutoServiceHelper helper;
     @MockBean
     private UtilServiceHelper utilHelper;
-    @MockBean
-    private PagingAndSortingProdutoRepository pagingAndSortingProdutoRepository;
 
     @Test
-    @DisplayName("Teste consutar produto com sucesso")
-    void deveConsutar_produto_comSucesso() throws Exception {
-        Produto produto = gerarProduto();
-        when(repository.findByNome(produto.getNome())).thenReturn(Optional.ofNullable(produto));
-        when(helper.buildResult(any())).thenReturn(gerarProdutoResponse());
+    @DisplayName("Teste consutar categoria de produto com sucesso")
+    void deveConsutar_categoria_produto_comSucesso() throws Exception {
+        CategoriaProduto produto = gerarCategoriaProduto();
+        when(repository.findByDescCategoriaProduto(produto.getDescCategoriaProduto()))
+                .thenReturn(Optional.ofNullable(produto));
+        when(helper.buildResult(any())).thenReturn(gerarCategoriaProdutoResponse());
 
-        mockMvc.perform(get(PATH+"/"+produto.getNome()))
+        mockMvc.perform(get(PATH+"/"+produto.getDescCategoriaProduto()))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.result.nome", is(produto.getNome())));
+                .andExpect(jsonPath("$.result.descCategoriaProduto", is(produto.getDescCategoriaProduto())));
     }
 
     @Test
-    @DisplayName("Teste consutar produto não encontrado")
+    @DisplayName("Teste consutar categoria de produto não encontrado")
     void deveConsutar_produto_nao_encontrado() throws Exception {
         String nome = "teste";
         mockMvc.perform(get(PATH+"/"+nome))
@@ -78,24 +83,12 @@ public class ProdutoResouceAdmTest extends ProdutoResourceAdmBaseTest{
     }
 
     @Test
-    @DisplayName("Teste para trazer todos Produtos")
+    @DisplayName("Teste para trazer todas as Categorias de Produtos")
     void deveTrazerTodosProdutos() throws Exception {
-        SearchCriteria searchCriteria = new SearchCriteria(10, 1);
-        Specification<Produto> criteria = new ProdutoServiceHelper().getCriteria(searchCriteria);
-        Set<String> sortBy = Set.of("idProduto.desc");
-        when(helper.getCriteria(searchCriteria)).thenReturn(criteria);
-        PageRequest paging = PageRequest.of(
-                searchCriteria.getOffset(),
-                searchCriteria.getLimit(),
-                Sort.by(new ArrayList<>(getSortedBy(sortBy))));
-        when(utilHelper.buildPaging(searchCriteria, sortBy)).thenReturn(paging);
-
-        Page<Produto> pages = Mockito.mock(Page.class);
-        pages = pages();
-        when(this.pagingAndSortingProdutoRepository.findAll()).thenReturn(pages);
-        doReturn(pages()).when(service).listar(any(), any(), any());
-        Page<ProdutoResponse> docs = new ProdutoServiceHelper().toProdutoResponse(pages);
-        doReturn(docs).when(helper).toProdutoResponse(any());
+        doReturn(gerarListaDeProdutos()).when(service).listar();
+        List<CategoriaProdutoResponse> docs = new CategoriaProdutoServiceHelper()
+                            .toCategoriaProdutoResponse(gerarListaDeProdutos());
+        doReturn(docs).when(helper).toCategoriaProdutoResponse(any());
 
         mockMvc.perform(get(PATH))
                 .andDo(print())
@@ -103,15 +96,15 @@ public class ProdutoResouceAdmTest extends ProdutoResourceAdmBaseTest{
     }
 
     @Test
-    @DisplayName("Teste Criar Produto com Sucesso")
-    void deveCriar_produto_comSucesso() throws Exception {
+    @DisplayName("Teste Criar Categoria de Produto com Sucesso")
+    void deveCriar_categoria_produto_comSucesso() throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
         final String body =
-                objectMapper.writeValueAsString(gerarProdutoRequest());
+                objectMapper.writeValueAsString(gerarCategoriaProdutoRequest());
 
-        when(service.criar(any())).thenReturn(gerarProduto());
+        when(service.criar(any())).thenReturn(gerarCategoriaProduto());
 
-        when(helper.buildResult(any())).thenReturn(gerarProdutoResponse());
+        when(helper.buildResult(any())).thenReturn(gerarCategoriaProdutoResponse());
 
         mockMvc
                 .perform(
@@ -121,11 +114,11 @@ public class ProdutoResouceAdmTest extends ProdutoResourceAdmBaseTest{
                                 .content(body))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.result.nome", is(gerarProdutoResponse().getNome())));;
+                .andExpect(jsonPath("$.result.descCategoriaProduto", is(gerarCategoriaProdutoResponse().getDescCategoriaProduto())));;
     }
 
     @Test
-    @DisplayName("Teste com erro na validação de entrada de Produto")
+    @DisplayName("Teste com erro na validação de entrada de Categoria de Produto")
     void deveRetornarBadRequestNaValidacaoDeEntrada() throws Exception {
         String contentRequestWork = "{}";
         mockMvc
@@ -138,15 +131,15 @@ public class ProdutoResouceAdmTest extends ProdutoResourceAdmBaseTest{
     }
 
     @Test
-    @DisplayName("Teste excluir Produto com sucesso")
-    void deveExcluirProduto_comSucesso() throws  Exception {
+    @DisplayName("Teste excluir Categoria de Produto com sucesso")
+    void deveExcluirCategoriaProduto_comSucesso() throws  Exception {
         final ServiceResponse<Boolean> serviceResponse = new ServiceResponse<>();
         serviceResponse.setResult(true);
-        Produto produto = gerarProduto();
-        when(repository.findById(produto.getIdProduto())).thenReturn(Optional.ofNullable(produto));
+        CategoriaProduto produto = gerarCategoriaProduto();
+        when(repository.findById(produto.getIdCategoriaProduto())).thenReturn(Optional.ofNullable(produto));
         Mockito.doNothing().when(service).excluir(produto);
 
-        mockMvc.perform(delete(PATH+"/"+produto.getIdProduto())
+        mockMvc.perform(delete(PATH+"/"+produto.getIdCategoriaProduto())
                         .header(AUTH, BEARER_TOKEN)
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk())
