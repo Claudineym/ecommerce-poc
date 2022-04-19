@@ -6,20 +6,18 @@ import br.com.ecommerce.business.domain.entity.Estado;
 import br.com.ecommerce.business.domain.entity.Sexo;
 import br.com.ecommerce.business.domain.service.helper.ClienteServiceHelperTest;
 import br.com.ecommerce.common.message.Mensagem;
-import br.com.ecommerce.common.resource.ServicePageableResponse;
 import br.com.ecommerce.common.resource.ServiceResponse;
 import br.com.ecommerce.inbound.dto.ClienteRequest;
+import br.com.ecommerce.inbound.dto.ClienteResponse;
 import br.com.ecommerce.inbound.dto.EnderecoRequest;
-import br.com.ecommerce.outbound.dto.PessoaResultResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.BeforeEach;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 
 import java.util.*;
 
 @Slf4j
-public class ClienteResourceAdmTestBaseTest extends ClienteServiceHelperTest {
+public class ClienteResourceAdmBaseTest extends ClienteServiceHelperTest {
 
     public static final String AUTH = "Authorization";
     public static final String BEARER_TOKEN = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiaWF0IjoxNTE2MjM5MDIyLCJpcCI6IjE5Mi4xNjguMC4xIiwicm9sZXMiOiIifQ.0luAj0haGR1yEb0SVsRbm_in6z_igIkbnee_znofuyw";
@@ -28,14 +26,7 @@ public class ClienteResourceAdmTestBaseTest extends ClienteServiceHelperTest {
 
     private List<Cliente> clientes;
 
-    @BeforeEach
-    void setUp() {
-        listar();
-    }
-
-    protected Page<Cliente> listar(){
-        ServicePageableResponse<List<PessoaResultResponse>> response =
-                new ServicePageableResponse<>();
+    protected Page<Cliente> pages(){
         Page<Cliente> pages = new PageImpl(gerarListaDeClientes());
         return pages;
     }
@@ -78,6 +69,15 @@ public class ClienteResourceAdmTestBaseTest extends ClienteServiceHelperTest {
                     .build();
     }
 
+    protected  ClienteResponse gerarClienteResponse() {
+        Cliente cliente = gerarCliente();
+        return ClienteResponse.builder()
+                .id(cliente.getId())
+                .nome(cliente.getNome())
+                .celular(cliente.getCelular())
+                .email(cliente.getEmail())
+                .build();
+    }
     protected ServiceResponse gerarClienteNaoEncontradoResponse(String nomeCliente){
         final ServiceResponse serviceResponse = new ServiceResponse<>();
         serviceResponse.addMensagem(Mensagem.NAO_ENCONTRADO.getCodigo(), Mensagem.NAO_ENCONTRADO.getDescricao().replace("${0}", nomeCliente));

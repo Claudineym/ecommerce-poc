@@ -2,10 +2,10 @@ package br.com.ecommerce.business.domain.service.helper;
 
 import br.com.ecommerce.business.domain.entity.Cliente;
 import br.com.ecommerce.business.domain.entity.Endereco;
-import br.com.ecommerce.inbound.dto.ClienteSearchCriteria;
+import br.com.ecommerce.inbound.dto.SearchCriteria;
 import br.com.ecommerce.inbound.dto.EnderecoRequest;
 import br.com.ecommerce.inbound.dto.EnderecoResponse;
-import br.com.ecommerce.outbound.dto.PessoaResultResponse;
+import br.com.ecommerce.outbound.dto.ClienteResultResponse;
 import com.google.common.base.Preconditions;
 import lombok.Data;
 import org.springframework.data.domain.Page;
@@ -33,15 +33,15 @@ public class ClienteServiceHelperTest {
     private static final String DEFAULT_ORDER_COLUMN = "idCliente.asc";
 
 
-    public Page<PessoaResultResponse> toClienteResponse(
+    public Page<ClienteResultResponse> toClienteResponse(
             Page<Cliente> clientes) {
-        List<PessoaResultResponse> response =
+        List<ClienteResultResponse> response =
                 clientes.stream().map(this::buildClienteResult).collect(Collectors.toList());
         return new PageImpl<>(response);
     }
 
-    public PessoaResultResponse buildClienteResult(Cliente cliente){
-        return PessoaResultResponse
+    public ClienteResultResponse buildClienteResult(Cliente cliente){
+        return ClienteResultResponse
                 .builder()
                 .id(cliente.getId())
                 .nome(cliente.getNome())
@@ -52,7 +52,7 @@ public class ClienteServiceHelperTest {
     }
 
     public Specification<Cliente> getCriteria(
-            ClienteSearchCriteria searchCriteria) {
+            SearchCriteria searchCriteria) {
 
         return (root, query, criteriaBuilder) ->
                 criteriaBuilder.and(buildPredicates(root, criteriaBuilder, searchCriteria));
@@ -61,13 +61,13 @@ public class ClienteServiceHelperTest {
     public Predicate[] buildPredicates(
             Root<Cliente> root,
             CriteriaBuilder criteriaBuilder,
-            ClienteSearchCriteria searchCriteria) {
+            SearchCriteria searchCriteria) {
         List<Predicate> predicates = new ArrayList<>();
 
         return predicates.toArray(new Predicate[0]);
     }
 
-    public PageRequest buildPaging(ClienteSearchCriteria criteria, Set<String> sortBy) {
+    public PageRequest buildPaging(SearchCriteria criteria, Set<String> sortBy) {
         return PageRequest.of(
                 criteria.getOffset(),
                 criteria.getLimit(),

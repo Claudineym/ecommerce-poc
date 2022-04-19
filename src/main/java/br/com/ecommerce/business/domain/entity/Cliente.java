@@ -13,7 +13,6 @@ import java.util.UUID;
 @NoArgsConstructor
 @Getter @Setter
 @Entity
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class Cliente {
 
     @Id

@@ -5,7 +5,7 @@ import br.com.ecommerce.business.domain.entity.Vendedor;
 import br.com.ecommerce.business.domain.repository.ClienteRepository;
 import br.com.ecommerce.business.domain.repository.PagingAndSortingClienteRepository;
 import br.com.ecommerce.business.domain.repository.VendedorRepository;
-import br.com.ecommerce.business.domain.service.helper.ClienteServiceHelper;
+import br.com.ecommerce.common.helper.UtilServiceHelper;
 import br.com.ecommerce.inbound.dto.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +21,7 @@ import java.util.*;
 public class ClienteService {
 
     private final PagingAndSortingClienteRepository pagingAndSortingClienteRepository;
-    private final ClienteServiceHelper helper;
+    private final UtilServiceHelper helper;
     private final ClienteRepository repository;
     private final VendedorRepository vendedorRepository;
 
@@ -29,7 +29,7 @@ public class ClienteService {
        return repository.save(cliente);
     }
 
-    public Page<Cliente> listar(Specification<Cliente> criteria, ClienteSearchCriteria searchCriteria, Set<String> sortBy) {
+    public Page<Cliente> listar(Specification<Cliente> criteria, SearchCriteria searchCriteria, Set<String> sortBy) {
         var paging = helper.buildPaging(searchCriteria, sortBy == null ? Set.of("id") : sortBy);
         Page<Cliente> pages = pagingAndSortingClienteRepository.findAll(criteria, paging);
         return pages;

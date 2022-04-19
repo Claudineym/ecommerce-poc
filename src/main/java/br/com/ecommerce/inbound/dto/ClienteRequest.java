@@ -2,9 +2,7 @@ package br.com.ecommerce.inbound.dto;
 
 import br.com.ecommerce.business.domain.entity.Cliente;
 import br.com.ecommerce.business.domain.entity.Sexo;
-import br.com.ecommerce.business.domain.entity.Vendedor;
 import br.com.ecommerce.business.domain.service.helper.ClienteServiceHelper;
-import br.com.ecommerce.business.domain.service.helper.VendedorServiceHelper;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -12,7 +10,6 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.Set;
-import java.util.UUID;
 
 @Builder
 @Getter

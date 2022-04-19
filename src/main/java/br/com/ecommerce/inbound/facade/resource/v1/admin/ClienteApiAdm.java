@@ -6,7 +6,7 @@ import br.com.ecommerce.common.resource.ServicePageableResponse;
 import br.com.ecommerce.common.resource.ServiceResponse;
 import br.com.ecommerce.common.validator.SortByFields;
 import br.com.ecommerce.inbound.dto.*;
-import br.com.ecommerce.outbound.dto.PessoaResultResponse;
+import br.com.ecommerce.outbound.dto.ClienteResultResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -49,7 +49,7 @@ public interface ClienteApiAdm {
             @ApiResponse(responseCode = "400", description = "Cliente inválido.") })
     @PatchMapping(consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE,
-            path = "/{}")
+            path = "/{idCliente}")
     public ServiceResponse<Cliente> alterar(@PathVariable("idCliente") String idCliente, @RequestBody ClienteEditarRequest cliente);
 
 
@@ -77,8 +77,8 @@ public interface ClienteApiAdm {
             @ApiResponse(responseCode = "200", description = "Sucesso."),
             @ApiResponse(responseCode = "400", description = "Inválido.") })
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    ServicePageableResponse<List<PessoaResultResponse>> listar(
-            @Validated ClienteSearchCriteria searchCriteria,
+    ServicePageableResponse<List<ClienteResultResponse>> listar(
+            @Validated SearchCriteria searchCriteria,
             @RequestParam(value = SORT_BY, required = false)
             @SortByFields(enumClass = SortByAllowedFields.class, message = INVALID_SORT_FIELD)
                     Set<String> sortBy);

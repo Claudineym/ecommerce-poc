@@ -4,6 +4,7 @@ import br.com.ecommerce.business.domain.entity.Cliente;
 import br.com.ecommerce.business.domain.entity.Vendedor;
 import br.com.ecommerce.business.domain.repository.ClienteRepository;
 import br.com.ecommerce.business.domain.repository.VendedorRepository;
+import br.com.ecommerce.common.EcommerceTestBase;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -19,12 +20,14 @@ import static org.mockito.Mockito.when;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(MockitoExtension.class)
-public class ClienteServiceTest {
+public class ClienteServiceTest extends EcommerceTestBase {
 
-    @InjectMocks private ClienteService service;
+    @InjectMocks
+    private ClienteService service;
     @Mock
     private ClienteRepository repository;
-    @Mock private VendedorRepository vendedorRepository;
+    @Mock
+    private VendedorRepository vendedorRepository;
 
     @BeforeEach
     public void init() throws JsonProcessingException {
@@ -34,9 +37,20 @@ public class ClienteServiceTest {
     @Test
     @DisplayName("Service - transformar cliente em vendedor")
     void transformarEmVendedor_ComSucesso() {
-        Vendedor vendedor = new Vendedor();
         Cliente cliente = new Cliente();
+        cliente.setNome(VALOR_NOME);
+        Vendedor vendedor = new Vendedor();
         when(vendedorRepository.save(any())).thenReturn(vendedor);
-        assertThat(service.transformarEmVendedor(cliente));
+        Vendedor vendedorRetorno = service.transformarEmVendedor(cliente);
+        assertThat(cliente.getNome().equals(vendedorRetorno.getNome()));
+    }
+
+    @Test
+    @DisplayName("Service - criar cliente com sucesso")
+    void criarCliente_comSucesso(){
+        Cliente cliente = gerarCliente();
+        when(repository.save(any())).thenReturn(cliente);
+        Cliente retorno = service.criar(cliente);
+        assertThat(cliente.getNome().equals(retorno.getNome()));
     }
 }

@@ -10,8 +10,9 @@ import br.com.ecommerce.common.resource.ServicePageableResponse;
 import br.com.ecommerce.common.resource.ServiceResponse;
 import br.com.ecommerce.common.resource.pages.PageMetadata;
 import br.com.ecommerce.inbound.dto.*;
-import br.com.ecommerce.outbound.dto.PessoaResultResponse;
+import br.com.ecommerce.outbound.dto.ClienteResultResponse;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
@@ -24,7 +25,7 @@ import java.util.Optional;
 import java.util.Set;
 
 @Slf4j
-@Data
+@RequiredArgsConstructor
 @RestController
 public class ClienteResourceAdm implements ClienteApiAdm {
 
@@ -122,8 +123,8 @@ public class ClienteResourceAdm implements ClienteApiAdm {
     }
 
     @Override
-    public ServicePageableResponse<List<PessoaResultResponse>> listar(ClienteSearchCriteria searchCriteria, Set<String> sortBy) {
-        ServicePageableResponse<List<PessoaResultResponse>> response =
+    public ServicePageableResponse<List<ClienteResultResponse>> listar(SearchCriteria searchCriteria, Set<String> sortBy) {
+        ServicePageableResponse<List<ClienteResultResponse>> response =
                 new ServicePageableResponse<>();
 
         Specification<Cliente> criteria = helper.getCriteria(searchCriteria);
@@ -137,7 +138,7 @@ public class ClienteResourceAdm implements ClienteApiAdm {
                         (long) searchCriteria.getOffset(),
                         (long) searchCriteria.getLimit());
 
-        Page<PessoaResultResponse> docs = helper.toClienteResponse(pages);
+        Page<ClienteResultResponse> docs = helper.toClienteResponse(pages);
 
         response.setMetadata(pageMetadata);
         response.setResult(docs.getContent());
