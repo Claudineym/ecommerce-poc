@@ -20,7 +20,6 @@ public class Produto {
     private String idProduto;
     private String nome;
     private String descProduto;
-    private Integer quantidade;
     private BigDecimal valorUnitario;
     private BigDecimal valorPromocial;
     private String tags;
@@ -48,12 +47,11 @@ public class Produto {
     private Set<ProdutoImagem> produtoImagens;
 
 
-    public Produto(String nome, String descProduto, Integer quantidade, BigDecimal valorUnitario,
+    public Produto(String nome, String descProduto, BigDecimal valorUnitario,
                    BigDecimal valorPromocial, String tags, CategoriaProduto categoriaProduto, Set<ProdutoImagem> produtoImagens) {
         this.idProduto = UUID.randomUUID().toString();
         this.nome = nome;
         this.descProduto = descProduto;
-        this.quantidade = quantidade;
         this.valorUnitario = valorUnitario;
         this.valorPromocial = valorPromocial;
         this.tags = tags;
@@ -63,5 +61,20 @@ public class Produto {
 
     public Produto(String nome) {
         this.nome = nome;
+    }
+
+    public Produto(BigDecimal valorUnitario) {
+        this.valorUnitario = valorUnitario;
+    }
+
+    public void aplicarDesconto(DescontoStrategy desconto){
+        this.valorPromocial = desconto.aplicarDesconto(this.valorUnitario);
+    }
+
+    public BigDecimal getValorDeVendaDoProduto(){
+        if(valorPromocial != null){
+            return valorPromocial;
+        }
+        return valorUnitario;
     }
 }

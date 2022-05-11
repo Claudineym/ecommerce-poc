@@ -23,8 +23,18 @@ public class EcommerceTestBase {
     }
 
     protected Produto gerarProduto() {
-        return new Produto("Produto 001", "desc produto 001", 10,
+        return new Produto("Produto 001", "desc produto 001",
                 BigDecimal.valueOf(100.85), BigDecimal.valueOf(99.9), "TAG1",
                 new CategoriaProduto("Eletrônico"), Set.of(new ProdutoImagem()));
+    }
+
+    protected  CarrinhoCompras gerarCarrinhoComVariosProdutos(){
+        Integer QTDE = 12;
+        Produto produto = this.gerarProduto();
+        CarrinhoCompras carrinho = new CarrinhoCompras();
+        for(int i = 1; i <= QTDE; i++){
+            carrinho.adicionarItemNoCarrinho(new ItemCarrinho(produto, i));
+        }
+        return  carrinho;
     }
 }

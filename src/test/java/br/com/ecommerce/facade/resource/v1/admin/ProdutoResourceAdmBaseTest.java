@@ -32,20 +32,20 @@ public class ProdutoResourceAdmBaseTest extends ClienteServiceHelperTest {
     }
 
     protected Produto gerarProduto() {
-        return new Produto("Produto 001", "desc produto 001", 10,
+        return new Produto("Produto 001", "desc produto 001",
                 BigDecimal.valueOf(100.85), BigDecimal.valueOf(99.9), "TAG1",
                 new CategoriaProduto("Eletrônico"), Set.of(new ProdutoImagem()));
     }
 
     protected List<Produto> gerarListaDeProdutos(){
         this.produtos = new ArrayList<>();
-        this.produtos.add(new Produto("Produto 001", "desc produto 001", 10,
+        this.produtos.add(new Produto("Produto 001", "desc produto 001",
                 BigDecimal.valueOf(100.85), BigDecimal.valueOf(99.9), "TAG1",
                 new CategoriaProduto("Eletrônico"), Set.of(new ProdutoImagem())));
-        this.produtos.add(new Produto("Produto 002", "desc produto 002", 54,
+        this.produtos.add(new Produto("Produto 002", "desc produto 002",
                 BigDecimal.valueOf(980.85), BigDecimal.valueOf(965.25), "TAG2",
                 new CategoriaProduto("Papelaria"), Set.of(new ProdutoImagem())));
-        this.produtos.add(new Produto("Produto 003", "desc produto 003", 1,
+        this.produtos.add(new Produto("Produto 003", "desc produto 003",
                 BigDecimal.valueOf(5.25), BigDecimal.valueOf(5.20), "TAG3",
                 new CategoriaProduto("Cama e Mesa"), Set.of(new ProdutoImagem())));
         return produtos;
@@ -55,7 +55,6 @@ public class ProdutoResourceAdmBaseTest extends ClienteServiceHelperTest {
         return ProdutoRequest.builder()
                 .descProduto("desc produto")
                 .categoriaProduto(new CategoriaProduto("desc categoria produto"))
-                .quantidade(112)
                 .valorPromocial(BigDecimal.valueOf(10.99))
                 .valorUnitario(BigDecimal.valueOf(11.00))
                 .tags("TAGS").build();

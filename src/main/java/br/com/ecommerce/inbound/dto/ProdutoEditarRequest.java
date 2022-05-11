@@ -12,7 +12,6 @@ import java.util.Set;
 public class ProdutoEditarRequest {
     @JsonProperty private String nome;
     @JsonProperty private String descProduto;
-    @JsonProperty private Integer quantidade;
     @JsonProperty private BigDecimal valorUnitario;
     @JsonProperty private BigDecimal valorPromocial;
     @JsonProperty private String tags;
@@ -28,11 +27,6 @@ public class ProdutoEditarRequest {
         if(Objects.nonNull(this.descProduto)){
             if(!this.descProduto.equals(produto.getDescProduto())){
                 produto.setDescProduto(this.descProduto);
-            }
-        }
-        if(Objects.nonNull(this.quantidade)){
-            if(!this.quantidade.equals(produto.getQuantidade())){
-                produto.setQuantidade(this.quantidade);
             }
         }
         if(Objects.nonNull(this.valorUnitario)){

@@ -19,7 +19,6 @@ public class ProdutoRequest {
     @NotEmpty(message = "Nome não pode ser vazio")
     private String nome;
     private String descProduto;
-    private Integer quantidade;
     private BigDecimal valorUnitario;
     private BigDecimal valorPromocial;
     private String tags;
@@ -27,7 +26,7 @@ public class ProdutoRequest {
     private Set<ProdutoImagem> produtoImagens;
 
     public Produto toProduto(){
-        return new Produto(this.nome, this.descProduto, this.quantidade, this.valorUnitario,
+        return new Produto(this.nome, this.descProduto, this.valorUnitario,
                 this.valorPromocial, this.tags, this.categoriaProduto, this.produtoImagens);
     }
 }
